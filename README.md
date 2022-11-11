@@ -1,2 +1,2 @@
-# PazzleWorld
+# PuzzleWorld
 TeamF

@@ -57,6 +57,8 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
     int mapchecker[][] = new int[vertical_num][horizontal_num];
 
     private int leftId;
+    private int firstId;
+    private boolean firstDrag = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,29 +122,46 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
 
     public boolean onDrag(View v, DragEvent event) {
         if(Mode == 1) {
+
+            if(!firstDrag) {
+                firstId = map.get(mDragView.getId());
+                leftId = mDragView.getId();
+                for(int i=0;i<vertical_num;i++) {
+                    for (int j = 0; j < horizontal_num; j++) {
+                        if(Rid[i][j] == mDragView.getId()) ObjStatus[i][j] = map.get(v.getId());
+                    }
+                }
+                firstDrag = true;
+            }
+
             switch (event.getAction()) {
                 // 手を放し、ドラッグが終了した時の処理
                 // ドラッグしているViewを表示させる。
 
                 case DragEvent.ACTION_DRAG_ENDED:
-
-                    /*for(int i=0;i<vertical_num;i++) {
-                        for (int j = 0; j < horizontal_num; j++) {
-                            if(Rid[i][j] == mDragView.getId()) ObjStatus[i][j] = map.get(v.getId());
-                        }
-                    }*/
-
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                         getMainExecutor().execute(() -> mDragView.setAlpha(1));
 
+                        for(int i=0;i<vertical_num;i++) {
+                            for (int j = 0; j < horizontal_num; j++) {
+                                if (Rid[i][j] == v.getId()) ObjStatus[i][j] = firstId;
+                            }
+                        }
+                        firstDrag = false;
                         Mode = 2;
                     }
                     break;
-
                 // ドラッグ中他のViewの上に乗る時の処理
                 // Viewの位置を入れ替える
                 case DragEvent.ACTION_DRAG_LOCATION:
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+
+                        for(int i=0;i<vertical_num;i++) {
+                            for (int j = 0; j < horizontal_num; j++) {
+                                if (Rid[i][j] == leftId) ObjStatus[i][j] = map.get(v.getId());
+                            }
+                        }
+
                         getMainExecutor().execute(() -> swap(v, mDragView));
                     }
                     break;
@@ -150,7 +169,6 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
         }
         return true;
     }
-
 
     private void swap(View v1, View v2) {
         // 同じViewなら入れ替える必要なし
@@ -164,21 +182,7 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
         gridLayout.addView(v1, p2);
         gridLayout.addView(v2, p1);
 
-        //移動先のスフィアv1 掴んだスフィアv2
-        for(int i=0;i<vertical_num;i++) {
-            for (int j = 0; j < horizontal_num; j++) {
-                if(Rid[i][j] == v2.getId())
-                {
-                    ObjStatus[i][j] = map.get(v1.getId());
-                    leftId = map.get(v1.getId());
-                }
-            }
-        }
-        for(int i=0;i<vertical_num;i++) {
-            for (int j = 0; j < horizontal_num; j++) {
-                if (Rid[i][j] == v1.getId()) ObjStatus[i][j] = map.get(v2.getId());
-            }
-        }
+        leftId = v1.getId();
 
         //確認用
         for(int i=0;i<vertical_num;i++) {
@@ -189,8 +193,6 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
             system.out.print("\n");
         }
 
-        /*map.put(v2.getId(),map.get(v1.getId()));
-        map.put(v1.getId(),map.get(leftId));*/
     }
 
     private void CheckAndCount() {
@@ -213,6 +215,15 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
                     mapchecker[i+2][j]=ObjStatus[i][j];
                 }
             }
+        }
+
+        //確認用
+        for(int i=0;i<vertical_num;i++) {
+            system.out.print(i + " : ");
+            for (int j = 0; j < horizontal_num; j++) {
+                system.out.print(ObjStatus[i][j]);
+            }
+            system.out.print("\n");
         }
 
         for(int i=0;i<vertical_num;i++) {

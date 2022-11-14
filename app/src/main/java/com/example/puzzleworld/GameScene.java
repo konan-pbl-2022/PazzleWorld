@@ -59,6 +59,7 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
     private int leftId;
     private int firstId;
     private boolean firstDrag = false;
+    private boolean PosMoved = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,17 +143,23 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                         getMainExecutor().execute(() -> mDragView.setAlpha(1));
 
-                        for(int i=0;i<vertical_num;i++) {
-                            for (int j = 0; j < horizontal_num; j++) {
-                                if (Rid[i][j] == v.getId()) ObjStatus[i][j] = firstId;
+                        //離した位置が、始めた位置と同じ
+                        if(PosMoved)
+                        {
+                            for(int i=0;i<vertical_num;i++) {
+                                for (int j = 0; j < horizontal_num; j++) {
+                                    if (Rid[i][j] == v.getId()) ObjStatus[i][j] = firstId;
+                                }
                             }
                         }
+
+                        PosMoved = false;
                         firstDrag = false;
                         Mode = 2;
                     }
                     break;
                 // ドラッグ中他のViewの上に乗る時の処理
-                // Viewの位置を入れ替える
+                // Viewの位置を入れ替えるx
                 case DragEvent.ACTION_DRAG_LOCATION:
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
 
@@ -161,7 +168,7 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
                                 if (Rid[i][j] == leftId) ObjStatus[i][j] = map.get(v.getId());
                             }
                         }
-
+                        PosMoved = true;
                         getMainExecutor().execute(() -> swap(v, mDragView));
                     }
                     break;

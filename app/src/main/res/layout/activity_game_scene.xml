@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="60px"
-        android:layout_marginTop="360px"
+        android:layout_marginTop="860px"
         android:columnCount="6"
         tools:context=".GameScene">
 
@@ -304,5 +304,13 @@
             android:src="@drawable/circle" />
 
     </GridLayout>
+
+    <TextView
+        android:id="@+id/DragTimer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|top"
+        android:text="0"
+        android:textSize="48sp" />
 
 </FrameLayout>

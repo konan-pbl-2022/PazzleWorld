@@ -56,6 +56,8 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
     int ObjStatus[][] = new int[vertical_num][horizontal_num];//ドロップデザインセット
     int mapchecker[][] = new int[vertical_num][horizontal_num];
 
+    char MovePos[][] = new char[vertical_num][horizontal_num];
+
     private int leftId;
     private int firstId;
     private boolean firstDrag = false;
@@ -82,10 +84,11 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
                     @Override
                     public void run() {
 
-                        if(Mode == 0)
+                        if(Mode == 0)//初期設定
                         {
                             for(int i=0;i<vertical_num;i++) {
                                 for(int j=0;j<horizontal_num;j++) {
+                                    MovePos[i][j] = '-';
                                     circle[i][j] = findViewById(Rid[i][j]);
                                     circle[i][j].setScaleX(0.90f);
                                     circle[i][j].setScaleY(0.90f);
@@ -94,13 +97,14 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
                                     DropSet(i,j,num);
                                 }
                             }
+
                             Mode = 1;
                         }
                         if(Mode == 2) CheckAndCount();
                     }
                 });
             }
-        }, 0, 20);
+        }, 0, 60);
 
     }
 
@@ -123,7 +127,6 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
 
     public boolean onDrag(View v, DragEvent event) {
         if(Mode == 1) {
-
             if(!firstDrag) {
                 firstId = map.get(mDragView.getId());
                 leftId = mDragView.getId();
@@ -143,6 +146,7 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                         getMainExecutor().execute(() -> mDragView.setAlpha(1));
 
+                        system.out.println(PosMoved);
                         //離した位置が、始めた位置と同じ
                         if(PosMoved)
                         {
@@ -152,7 +156,14 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
                                 }
                             }
                         }
-
+                        else
+                        {
+                            for(int i=0;i<vertical_num;i++) {
+                                for (int j = 0; j < horizontal_num; j++) {
+                                    if (Rid[i][j] == leftId) ObjStatus[i][j] = firstId;
+                                }
+                            }
+                        }
                         PosMoved = false;
                         firstDrag = false;
                         Mode = 2;
@@ -163,12 +174,6 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
                 case DragEvent.ACTION_DRAG_LOCATION:
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
 
-                        for(int i=0;i<vertical_num;i++) {
-                            for (int j = 0; j < horizontal_num; j++) {
-                                if (Rid[i][j] == leftId) ObjStatus[i][j] = map.get(v.getId());
-                            }
-                        }
-                        PosMoved = true;
                         getMainExecutor().execute(() -> swap(v, mDragView));
                     }
                     break;
@@ -189,16 +194,26 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
         gridLayout.addView(v1, p2);
         gridLayout.addView(v2, p1);
 
-        leftId = v1.getId();
+        for(int i=0;i<vertical_num;i++) {
+            for (int j = 0; j < horizontal_num; j++) {
+                if (Rid[i][j] == leftId) {
+                    MovePos[i][j] = 'o';
+                    ObjStatus[i][j] = map.get(v1.getId());
+                }
+                if (Rid[i][j] == v2.getId()) {
+                    MovePos[i][j] = '#';
+                }
+                if (Rid[i][j] == v1.getId()) {
+                    MovePos[i][j] = '@'; //こいつの挙動がおかしい
+                }
+            }
+        }
 
         //確認用
-        for(int i=0;i<vertical_num;i++) {
-            system.out.print(i + " : ");
-            for (int j = 0; j < horizontal_num; j++) {
-                system.out.print(ObjStatus[i][j]);
-            }
-            system.out.print("\n");
-        }
+        CheckTester(1);
+
+        leftId = v1.getId();
+        PosMoved = true;
 
     }
 
@@ -224,14 +239,6 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
             }
         }
 
-        //確認用
-        for(int i=0;i<vertical_num;i++) {
-            system.out.print(i + " : ");
-            for (int j = 0; j < horizontal_num; j++) {
-                system.out.print(ObjStatus[i][j]);
-            }
-            system.out.print("\n");
-        }
 
         for(int i=0;i<vertical_num;i++) {
             system.out.print(i + " : ");
@@ -241,6 +248,10 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
             }
             system.out.print("\n");
         }
+
+        //確認用
+        CheckTester(0);
+
         Mode = 3;
     }
 
@@ -251,5 +262,17 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
         ImageView Img = findViewById(Rid[i][j]);
         Drawable drawable = getResources().getDrawable(DropDesign[Num]);
         Img.setImageDrawable(drawable);
+    }
+
+    private void CheckTester(int num)
+    {
+        for(int i=0;i<vertical_num;i++) {
+            system.out.print(i + " : ");
+            for (int j = 0; j < horizontal_num; j++) {
+                if(num == 0) system.out.print(ObjStatus[i][j]);
+                if(num == 1) system.out.print(MovePos[i][j]);
+            }
+            system.out.print("\n");
+        }
     }
 }

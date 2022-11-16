@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".GameScene">
 
+
     <GridLayout
         android:id="@+id/GridLayout"
         android:layout_width="wrap_content"
@@ -305,12 +306,12 @@
 
     </GridLayout>
 
-    <TextView
-        android:id="@+id/DragTimer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center|top"
-        android:text="0"
-        android:textSize="48sp" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="324dp">
 
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
+
+

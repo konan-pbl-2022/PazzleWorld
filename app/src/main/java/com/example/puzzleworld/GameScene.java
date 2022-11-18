@@ -67,6 +67,8 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
     int Chara1Status[] = {3,10,2};
     int Chara2Status[] = {2,35,12};
     int Chara3Status[] = {2,16,5};
+
+
     int MaxHp,CurrentHp;
     int CharaAttack[] =  new int [3];
     int enemyAttackPoint = 15;

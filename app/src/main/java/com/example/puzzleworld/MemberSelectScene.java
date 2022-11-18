@@ -79,7 +79,7 @@ public class MemberSelectScene extends AppCompatActivity {
         chara[15].image = getResources().getDrawable(R.drawable.ssr4);
 
 
-        Button[] transitionButton = new Button[4];
+        Button[] transitionButton = new Button[3];
         ImageButton[] membersButton = new ImageButton[charaNum];
         final ImageButton[] mainCharaButton = new ImageButton[mainCharaNum];
 
@@ -207,7 +207,7 @@ public class MemberSelectScene extends AppCompatActivity {
 
 
 //        画面遷移
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 3; i++) {
             transitionButton[i] = (Button) findViewById(assignId("button", i));
         }
         transitionButton[0].setOnClickListener(new View.OnClickListener() {
@@ -228,15 +228,9 @@ public class MemberSelectScene extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        transitionButton[3].setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(MemberSelectScene.this,GachaScene.class);
-                startActivity(intent);
-            }
-        });
     }
 
-//    リソースをIdとして割り当てる
+    //    リソースをIdとして割り当てる
     int assignId(String s, int i) {
         Resources res = getResources();
         int Id = res.getIdentifier(s + (i + 1), "id", getPackageName());
@@ -259,7 +253,7 @@ public class MemberSelectScene extends AppCompatActivity {
         }
     }
 
-//    交換処理
+    //    交換処理
     void membersButtonClicked(ImageButton[] mCButton, int n) {
         if(chara[n].getPossession() && duplication(n)) {
             switch (clicked) {
@@ -287,7 +281,7 @@ public class MemberSelectScene extends AppCompatActivity {
         }
     }
 
-//    メインキャラの重複を無効にする処理
+    //    メインキャラの重複を無効にする処理
     boolean duplication(int n) {
         for(int i = 0; i < mainCharaNum; i++) {
             if(mainChara[i] == chara[n]) {

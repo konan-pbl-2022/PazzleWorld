@@ -131,7 +131,7 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
                         if (Mode == 0) FirstSetting(); //初期設定
                         //Mode == 1 ドラッグ＆ドロップ時間。　終わり次第Mode = 2へ
                         if (Mode == 2) CheckAndCount();
-                        if (Mode == 3) DropReDraw();
+                        //if (Mode == 3) DropReDraw();
                         if(Mode == 4) DamageCalc();
                     }
                 });
@@ -316,39 +316,9 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
                 system.out.println(del + ":" + DeleteCount[del]);
             }
 
-        gridLayout = findViewById(R.id.GridLayout);
-
-        for (int i = 0; i < gridLayout.getChildCount(); i++) {
-            View v = gridLayout.getChildAt(i);
-            v.setOnTouchListener((View.OnTouchListener) this);
-            v.setOnDragListener((View.OnDragListener) this);
-        }
 
         TestTimer = 0;
         TimerCounter = 0;
-        Mode = 3;
-    }
-
-    public void DropReDraw(){
-        for(int del=0;del<5;del++) {
-            for (int i = 0; i < vertical_num; i++) {
-                for (int j = 0; j < horizontal_num; j++) {
-                    if(del == mapchecker[i][j]) {
-                        DeleteCount[del] += 1;//数をカウント
-                        DeleteSum += 1;
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                            map.replace(Rid[i][j],5);
-                        }
-                        ObjStatus[i][j] = 5;
-                    }
-                    else
-                    {
-                        DropSet(i, j, map.get(Rid[i][j]));
-                    }
-                }
-            }
-            system.out.println(del + ":" + DeleteCount[del]);
-        }
         Mode = 4;
     }
 
@@ -382,6 +352,12 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
         CurrentHp -= enemyAttackPoint;
         TextView HpText = (TextView) findViewById(R.id.HpText);
         HpText.setText(MaxHp + "/" + CurrentHp + " ");
+
+        for (int i = 0; i < vertical_num; i++) {
+            for (int j = 0; j < horizontal_num; j++) {
+                if(ObjStatus[i][j] == 5); //そろった場所が一か所でも残ってる場合
+            }
+        }
 
         Mode = 5;
     }

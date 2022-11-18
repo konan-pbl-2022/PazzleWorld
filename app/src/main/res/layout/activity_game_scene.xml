@@ -436,7 +436,8 @@
         android:layout_marginLeft="65px"
         android:layout_marginTop="510px"
         android:text="0"
-        android:textSize="25sp" />
+        android:textSize="25sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/AttackText2"
@@ -445,7 +446,8 @@
         android:layout_marginLeft="410px"
         android:layout_marginTop="510px"
         android:text="0"
-        android:textSize="25sp" />
+        android:textSize="25sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/AttackText3"
@@ -454,7 +456,8 @@
         android:layout_marginLeft="750px"
         android:layout_marginTop="510px"
         android:text="0"
-        android:textSize="25sp" />
+        android:textSize="25sp"
+        android:textStyle="bold" />
 
     <TextView
     android:id="@+id/EnemyATKPText"

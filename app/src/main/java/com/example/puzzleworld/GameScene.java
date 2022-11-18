@@ -60,8 +60,8 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
 
     private int leftId;
     private boolean firstchecked = false;
-    float TimerCounter = 0;
     float TestTimer = 0;
+    float CircleSize = 0.02f;
 
     //1,水 2,草 3,火 4,岩
     int Chara1Status[] = {3,10,2};
@@ -70,7 +70,7 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
 
 
     int MaxHp,CurrentHp;
-    int CharaAttack[] =  new int [3];
+    int CharaAttack[] = new int [3];
     int enemyAttackPoint = 15;
     int playerHealPoint = 0;
     int playerAttackPoint = 0;
@@ -124,35 +124,25 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
                     public void run() {
 
                         //時間を管理するときに使えばイイ！
-                        if (TestTimer < 60) TestTimer += 0.5;
-                        else {
-                            TimerCounter += 1;//毎秒TimerCounterが1増えていく
-                            TestTimer = 0;
-                        }
+                        if (TestTimer < 6) TestTimer += 0.1;
+                        else TestTimer = 0;
 
                         if (Mode == 0) FirstSetting(); //初期設定
                         //Mode == 1 ドラッグ＆ドロップ時間。　終わり次第Mode = 2へ
                         if (Mode == 2) CheckAndCount();
-                        //if (Mode == 3) DropReDraw();
+                        if (Mode == 3 && TestTimer > 0.3) DeleteDrop();
                         if(Mode == 4) DamageCalc();
+                        if(Mode == 5) FillEmpty();//空白を新たなドロップが埋める
+                        if(Mode == 6 && TestTimer > 0.5) UpdateSize();//徐々に現れる新ドロップ
+                        if(Mode == 7) LastCheck();//攻撃、ダメージ処理
                     }
                 });
             }
-        }, 0, 8);
+        }, 0, 7);
     }
-
 
     @Override
     public void onBackPressed() {} //戻るボタンの無効化
-
-    /*public void run() {
-
-        //ここで毎フレームの処理
-        TextView HpText = (TextView)findViewById(R.id.HpText);
-        HpText.setText(MaxHp + "/" +CurrentHp+" ");
-        m_handler.postDelayed( this::run, 10);
-    }*/
-
 
     private void FirstSetting() {
         for(int i=0;i<vertical_num;i++) {
@@ -167,7 +157,6 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
             }
         }
         CheckTester(0);
-        CheckTester(1);
         Mode = 1;
     }
 
@@ -178,9 +167,7 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
                 mDragView = v;
 
                 // Viewをドラッグ状態にする。
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    v.startDragAndDrop(null, new View.DragShadowBuilder(v), v, 0);
-                }
+                    v.startDrag(null, new View.DragShadowBuilder(v), v, 0);
                 v.setAlpha(0);
             }
 
@@ -194,37 +181,22 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
 
             switch (event.getAction()) {
                 // 手を放し、ドラッグが終了した時の処理
-                // ドラッグしているViewを表示させる。
-
                 case DragEvent.ACTION_DRAG_ENDED:
-                    //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                         mDragView.setAlpha(1);
-
-                        for(int i=0;i<vertical_num;i++) {
-                            for (int j = 0; j < horizontal_num; j++) {
-                                if (leftId == Rid[i][j]) {
-                                    //ObjStatus[i][j] = map.get(mDragView.getId());
-                                }
-                            }
-                        }
                         firstchecked = false;
                         Mode = 2;
-                    //}
                     break;
-                // ドラッグ中他のViewの上に乗る時の処理
-                // Viewの位置を入れ替える
+                // ドラッグ中他のViewの上に乗る時、Viewの位置を入れ替える
                 case DragEvent.ACTION_DRAG_LOCATION:
-
                         swap(v, mDragView);
-
-                    break;
+                        break;
             }
         }
         return true;
     }
 
     private void swap(View v1, View v2) {
-        int a=0,b=0,c=0,d = 0,temp = 0,temp2=0;
+        int a=0,b=0,c=0,d=0,temp = 0,temp2=0;
         // 同じViewなら入れ替える必要なし
         if (v1 == v2) return;
         if(!firstchecked)
@@ -267,7 +239,6 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
                 }
             }
         }
-
         for(int i=0;i<vertical_num;i++) {
             for (int j = 0; j < horizontal_num; j++) {
                 //判定用を設定
@@ -288,49 +259,48 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
                 }
             }
         }
-        //確認用
-        for(int i=0;i<vertical_num;i++) {
-            system.out.print(i + " : ");
-            for (int j = 0; j < horizontal_num; j++) {
-                if(mapchecker[i][j] == 9) system.out.print("-");
-                else system.out.print(mapchecker[i][j]);
-            }
-            system.out.print("\n");
-        }
-        CheckTester(0);
-        CheckTester(1);
-
-        //消したドロップの数を全属性数える
+        //そろっているドロップの数を全属性数える
         for(int del=0;del<5;del++) {
-                for (int i = 0; i < vertical_num; i++) {
-                    for (int j = 0; j < horizontal_num; j++) {
-                        if(del == mapchecker[i][j]) {
-                            DeleteCount[del] += 1;//数をカウント
-                            DeleteSum += 1;
-                                map.remove(Rid[i][j]);
-                                map.put(Rid[i][j],5);
-                            ObjStatus[i][j] = 5;
-                            DropSet(i, j, map.get(Rid[i][j]));
-                        }
+            for (int i = 0; i < vertical_num; i++) {
+                for (int j = 0; j < horizontal_num; j++) {
+                    if(del == mapchecker[i][j]) {
+                        DeleteCount[del] += 1;//数をカウント
+                        DeleteSum++;
+                        ObjStatus[i][j] = 5;
                     }
                 }
-                system.out.println(del + ":" + DeleteCount[del]);
             }
+            system.out.println(del + ":" + DeleteCount[del]);
+        }
 
-
+        CheckTester(0);
         TestTimer = 0;
-        TimerCounter = 0;
+        Mode = 3;
+    }
+
+    public void DeleteDrop(){
+        for (int i = 0; i < vertical_num; i++) {
+            for (int j = 0; j < horizontal_num; j++) {
+                if(ObjStatus[i][j] == 5) {
+                    map.remove(Rid[i][j]);
+                    map.put(Rid[i][j],5);
+                    ObjStatus[i][j] = 6;
+                    DropSet(i, j, map.get(Rid[i][j]));
+                    TestTimer = 0;
+                    return;
+                }
+            }
+        }
         Mode = 4;
     }
 
     public void DamageCalc(){
-
+        system.out.println(Mode);
         playerHealPoint = DeleteCount[0] * ((int)(Chara1Status[1] + Chara2Status[1] + Chara3Status[1])/30);
-        for(int i=1;i<5;i++)
-        {
-            if(Chara1Status[0] == i) CharaAttack[0] += (Chara1Status[2] * DeleteCount[i]) /2;
-            if(Chara2Status[0] == i) CharaAttack[1] += (Chara2Status[2] * DeleteCount[i]) /2;
-            if(Chara3Status[0] == i) CharaAttack[2] += (Chara3Status[2] * DeleteCount[i]) /2;
+        for(int i=1;i<5;i++) {
+            if(Chara1Status[0] == i) CharaAttack[0] += (int)(Chara1Status[2] * DeleteCount[i]) /3;
+            if(Chara2Status[0] == i) CharaAttack[1] += (int)(Chara2Status[2] * DeleteCount[i]) /3;
+            if(Chara3Status[0] == i) CharaAttack[2] += (int)(Chara3Status[2] * DeleteCount[i]) /3;
         }
 
         TextView AttackText1 = (TextView) findViewById(R.id.AttackText1);
@@ -339,7 +309,6 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
         AttackText2.setText(CharaAttack[1]+"");
         TextView AttackText3 = (TextView) findViewById(R.id.AttackText3);
         AttackText3.setText(CharaAttack[2]+"");
-
 
         playerAttackPoint = CharaAttack[0] + CharaAttack[1] + CharaAttack[2];
 
@@ -350,17 +319,64 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
         TextView AText3 = (TextView) findViewById(R.id.PlayerHealPText);
         AText3.setText("PlayerHeal = " +playerHealPoint);
 
+        for (int i = 0; i < vertical_num; i++) {
+            for (int j = 0; j < horizontal_num; j++) {
+                if(ObjStatus[i][j] == 6) {
+                    Mode = 5;//そろった場所が一か所でも残ってる場合
+                    return;
+                }
+            }
+        }
+        Mode = 7; //全てのチェックが終了
+    }
+
+    private void FillEmpty() {
+        system.out.println(Mode);
+        CircleSize = 0.02f;
+        for (int i = 0; i < vertical_num; i++) {
+            for (int j = 0; j < horizontal_num; j++) {
+                if(ObjStatus[i][j] == 6) {
+                    circle[i][j] = findViewById(Rid[i][j]);
+                    circle[i][j].setScaleX(CircleSize);
+                    circle[i][j].setScaleY(CircleSize);
+                    int num = rand.nextInt(5);//ドロップの属性をここでランダムで決める
+                    ObjStatus[i][j] = num;
+                    map.remove(Rid[i][j]);
+                    map.put(Rid[i][j],num);
+                    DropSet(i,j,num);
+                }
+            }
+        }
+        TestTimer = 0;
+        Mode = 6;
+    }
+
+    private void UpdateSize(){
+        system.out.println(Mode);
+        if(CircleSize < 0.95f) {
+            CircleSize += 0.075f;
+            for (int i = 0; i < vertical_num; i++) {
+                for (int j = 0; j < horizontal_num; j++) {
+                    if(mapchecker[i][j] != 9) {
+                        circle[i][j].setScaleX(CircleSize);
+                        circle[i][j].setScaleY(CircleSize);
+                    }
+                }
+            }
+            TestTimer = 0;
+            return;
+        }else{
+            CircleSize = 0.95f;
+            Mode = 2; // 全て空白になるまで繰り返す
+        }
+    }
+
+    private void LastCheck(){
         CurrentHp -= enemyAttackPoint;
         TextView HpText = (TextView) findViewById(R.id.HpText);
         HpText.setText(MaxHp + "/" + CurrentHp + " ");
-
-        for (int i = 0; i < vertical_num; i++) {
-            for (int j = 0; j < horizontal_num; j++) {
-                if(ObjStatus[i][j] == 5); //そろった場所が一か所でも残ってる場合
-            }
-        }
-
-        Mode = 5;
+        for(int i=0;i<3;i++) CharaAttack[i] = 0;
+        Mode = 1;
     }
 
     //ドロップに与えられた属性によって表示する画像を変更する
@@ -370,14 +386,17 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
         Img.setImageDrawable(drawable);
     }
 
-    //引数0でObjStatus,1でImageViewのId
+    //引数0でObjStatus,1でImageViewのId,2でmapChecker
     private void CheckTester(int num){
-
         for(int i=0;i<vertical_num;i++) {
             system.out.print(i + " : ");
             for (int j = 0; j < horizontal_num; j++) {
                 if(num == 0) system.out.print(ObjStatus[i][j]+ " ");
                 if(num == 1) system.out.print(Rid[i][j]+ " ");
+                if(num == 2){
+                    if(mapchecker[i][j] == 9) system.out.print("-");
+                    else system.out.print(mapchecker[i][j]);
+                }
             }
             system.out.print("\n");
         }

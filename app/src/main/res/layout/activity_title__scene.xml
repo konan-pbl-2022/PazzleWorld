@@ -6,4 +6,11 @@
     android:layout_height="match_parent"
     tools:context=".Title_Scene">
 
+    <Button
+        android:id="@+id/button"
+        android:layout_width="413dp"
+        android:layout_height="728dp"
+        android:text="Game Start"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_editor_absoluteX="0dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

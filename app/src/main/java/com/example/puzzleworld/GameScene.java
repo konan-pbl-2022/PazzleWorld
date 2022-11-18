@@ -197,8 +197,8 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
                 // ドラッグしているViewを表示させる。
 
                 case DragEvent.ACTION_DRAG_ENDED:
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                        getMainExecutor().execute(() -> mDragView.setAlpha(1));
+                    //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                        mDragView.setAlpha(1);
 
                         for(int i=0;i<vertical_num;i++) {
                             for (int j = 0; j < horizontal_num; j++) {
@@ -209,14 +209,14 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
                         }
                         firstchecked = false;
                         Mode = 2;
-                    }
+                    //}
                     break;
                 // ドラッグ中他のViewの上に乗る時の処理
                 // Viewの位置を入れ替える
                 case DragEvent.ACTION_DRAG_LOCATION:
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                        getMainExecutor().execute(() -> swap(v, mDragView));
-                    }
+
+                        swap(v, mDragView);
+
                     break;
             }
         }

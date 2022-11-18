@@ -250,8 +250,6 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
                         temp2 = Rid[i][j];
                         c=i;
                         d=j;
-                        circle[i][j].setScaleX(0.65f);
-                        circle[i][j].setScaleY(0.65f);
                     }
                 }
             }
@@ -270,11 +268,6 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
 
         for(int i=0;i<vertical_num;i++) {
             for (int j = 0; j < horizontal_num; j++) {
-                //サイズを戻す
-                circle[i][j].setScaleX(0.95f);
-                circle[i][j].setScaleY(0.95f);
-                DropSet(i, j, 5);
-
                 //判定用を設定
                 mapchecker[i][j] = 9;
             }

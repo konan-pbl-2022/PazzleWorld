@@ -10,7 +10,7 @@
         android:layout_width="600dp"
         android:layout_height="520dp"
         android:layout_marginLeft="0px"
-        android:layout_marginTop="825px"
+        android:layout_marginTop="845px"
         android:background="#4C5CCC">
 
     </FrameLayout>
@@ -19,7 +19,7 @@
         android:layout_width="362dp"
         android:layout_height="360dp"
         android:layout_marginLeft="68px"
-        android:layout_marginTop="920px"
+        android:layout_marginTop="940px"
         android:background="#B3A8A8">
 
     </FrameLayout>
@@ -28,7 +28,7 @@
         android:layout_width="362dp"
         android:layout_height="22dp"
         android:layout_marginLeft="68px"
-        android:layout_marginTop="844px"
+        android:layout_marginTop="864px"
         android:background="#4A363E">
 
     </FrameLayout>
@@ -38,7 +38,7 @@
         android:layout_width="362dp"
         android:layout_height="22dp"
         android:layout_marginLeft="68px"
-        android:layout_marginTop="844px"
+        android:layout_marginTop="864px"
         android:background="#2EBC0E">
 
     </FrameLayout>
@@ -47,7 +47,7 @@
         android:layout_width="362dp"
         android:layout_height="22dp"
         android:layout_marginLeft="68px"
-        android:layout_marginTop="844px">
+        android:layout_marginTop="864px">
 
         <TextView
             android:layout_width="wrap_content"
@@ -73,7 +73,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="70px"
-        android:layout_marginTop="920px"
+        android:layout_marginTop="940px"
         android:columnCount="6"
         tools:context=".GameScene">
 
@@ -372,7 +372,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="65px"
-        android:layout_marginTop="560px"
+        android:layout_marginTop="580px"
         android:columnCount="5"
         tools:context=".GameScene">
 
@@ -434,7 +434,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="65px"
-        android:layout_marginTop="490px"
+        android:layout_marginTop="510px"
         android:text="0"
         android:textSize="25sp" />
 
@@ -443,7 +443,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="410px"
-        android:layout_marginTop="490px"
+        android:layout_marginTop="510px"
         android:text="0"
         android:textSize="25sp" />
 
@@ -452,7 +452,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="750px"
-        android:layout_marginTop="490px"
+        android:layout_marginTop="510px"
         android:text="0"
         android:textSize="25sp" />
 

@@ -6,6 +6,7 @@ package com.example.puzzleworld;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -19,8 +20,8 @@ public class MemberSelectScene extends AppCompatActivity {
     int clicked = 0;
     int charaNum = 16;
     int mainCharaNum = 3;
-    Character[] chara = new Character[charaNum];
-    Character[] mainChara = new Character[mainCharaNum];
+    public  Character[] chara = new Character[charaNum];
+    public Character[] mainChara = new Character[mainCharaNum];
 
     TextView[] textStatus = new TextView[3];
     TextView[] textLevel = new TextView[mainCharaNum];
@@ -60,22 +61,22 @@ public class MemberSelectScene extends AppCompatActivity {
         chara[3].setPossession(true);
 
 
-        chara[0].image = getResources().getDrawable(R.drawable.org_a02);
-        chara[1].image = getResources().getDrawable(R.drawable.org_b02);
-        chara[2].image = getResources().getDrawable(R.drawable.org_c02);
-        chara[3].image = getResources().getDrawable(R.drawable.org_d02);
-        chara[4].image = getResources().getDrawable(R.drawable.org_a02);
-        chara[5].image = getResources().getDrawable(R.drawable.org_a02);
-        chara[6].image = getResources().getDrawable(R.drawable.org_a02);
-        chara[7].image = getResources().getDrawable(R.drawable.org_a02);
-        chara[8].image = getResources().getDrawable(R.drawable.org_a02);
-        chara[9].image = getResources().getDrawable(R.drawable.org_a02);
-        chara[10].image = getResources().getDrawable(R.drawable.org_a02);
-        chara[11].image = getResources().getDrawable(R.drawable.org_a02);
-        chara[12].image = getResources().getDrawable(R.drawable.org_a02);
-        chara[13].image = getResources().getDrawable(R.drawable.org_a02);
-        chara[14].image = getResources().getDrawable(R.drawable.org_a02);
-        chara[15].image = getResources().getDrawable(R.drawable.org_a02);
+        chara[0].image = getResources().getDrawable(R.drawable.n1);
+        chara[1].image = getResources().getDrawable(R.drawable.n2);
+        chara[2].image = getResources().getDrawable(R.drawable.n3);
+        chara[3].image = getResources().getDrawable(R.drawable.n4);
+        chara[4].image = getResources().getDrawable(R.drawable.r1);
+        chara[5].image = getResources().getDrawable(R.drawable.r2);
+        chara[6].image = getResources().getDrawable(R.drawable.r3);
+        chara[7].image = getResources().getDrawable(R.drawable.r4);
+        chara[8].image = getResources().getDrawable(R.drawable.sr1);
+        chara[9].image = getResources().getDrawable(R.drawable.sr2);
+        chara[10].image = getResources().getDrawable(R.drawable.sr3);
+        chara[11].image = getResources().getDrawable(R.drawable.sr4);
+        chara[12].image = getResources().getDrawable(R.drawable.ssr1);
+        chara[13].image = getResources().getDrawable(R.drawable.ssr2);
+        chara[14].image = getResources().getDrawable(R.drawable.ssr3);
+        chara[15].image = getResources().getDrawable(R.drawable.ssr4);
 
 
         Button[] transitionButton = new Button[4];
@@ -330,9 +331,6 @@ public class MemberSelectScene extends AppCompatActivity {
         textLevel[n].setText("Lv." + str);
     }
 
-    Character[] getMainCharacter(){
-        return mainChara;
-    }
 
 }
 

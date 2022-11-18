@@ -40,6 +40,15 @@ public class StageSelectScene extends AppCompatActivity {
             }
         });
 
+        Button nextButton4 = (Button)findViewById(R.id.button6);
+        nextButton4.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                Intent intent = new Intent(StageSelectScene.this, GameScene.class);
+                startActivity(intent);
+            }
+        });
+
+
 
     }
 }

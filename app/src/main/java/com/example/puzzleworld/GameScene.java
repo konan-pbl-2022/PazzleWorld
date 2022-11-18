@@ -307,9 +307,8 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
                         if(del == mapchecker[i][j]) {
                             DeleteCount[del] += 1;//数をカウント
                             DeleteSum += 1;
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                                map.replace(Rid[i][j],5);
-                            }
+                                map.remove(Rid[i][j]);
+                                map.put(Rid[i][j],5);
                             ObjStatus[i][j] = 5;
                             DropSet(i, j, map.get(Rid[i][j]));
                         }

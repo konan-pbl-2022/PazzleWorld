@@ -79,7 +79,7 @@ public class MemberSelectScene extends AppCompatActivity {
         chara[15].image = getResources().getDrawable(R.drawable.ssr4);
 
 
-        Button[] transitionButton = new Button[4];
+        Button[] transitionButton = new Button[3];
         ImageButton[] membersButton = new ImageButton[charaNum];
         final ImageButton[] mainCharaButton = new ImageButton[mainCharaNum];
 
@@ -207,7 +207,7 @@ public class MemberSelectScene extends AppCompatActivity {
 
 
 //        画面遷移
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 3; i++) {
             transitionButton[i] = (Button) findViewById(assignId("button", i));
         }
         transitionButton[0].setOnClickListener(new View.OnClickListener() {
@@ -225,12 +225,6 @@ public class MemberSelectScene extends AppCompatActivity {
         transitionButton[2].setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(MemberSelectScene.this,StageSelectScene.class);
-                startActivity(intent);
-            }
-        });
-        transitionButton[3].setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(MemberSelectScene.this,GachaScene.class);
                 startActivity(intent);
             }
         });

@@ -11,7 +11,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Intent intent = new Intent(MainActivity.this,MemberSelectScene.class);
+
+        Intent intent = new Intent(MainActivity.this,GameScene.class);
         startActivity(intent);
     }
 }

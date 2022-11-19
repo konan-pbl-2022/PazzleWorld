@@ -114,6 +114,8 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
         CurrentHp = MaxHp;
         TextView HpText = (TextView) findViewById(R.id.HpText);
         HpText.setText(MaxHp + "/" + CurrentHp + " ");
+        TextView HealText = (TextView) findViewById(R.id.PlayerHealPText);
+        HealText.setText("");
 
         timer.schedule(new TimerTask() {
             @Override
@@ -394,6 +396,8 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
         AText2.setText("");
         TextView AText3 = (TextView) findViewById(R.id.AttackText3);
         AText3.setText("");
+        TextView HealText = (TextView) findViewById(R.id.PlayerHealPText);
+        HealText.setText("");
         Mode = 1;
     }
 

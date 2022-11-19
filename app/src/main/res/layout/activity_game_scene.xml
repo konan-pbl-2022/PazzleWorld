@@ -34,18 +34,24 @@
     </FrameLayout>
 
     <FrameLayout
-        android:id="@+id/HpBar"
         android:layout_width="362dp"
         android:layout_height="22dp"
         android:layout_marginLeft="68px"
         android:layout_marginTop="864px"
-        android:background="#2EBC0E">
+        >
+
+        <ImageView
+            android:id="@+id/HpBar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="-970px"
+          android:src="@drawable/hp_bar" />
 
     </FrameLayout>
 
     <FrameLayout
         android:layout_width="362dp"
-        android:layout_height="22dp"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="68px"
         android:layout_marginTop="864px">
 
@@ -67,6 +73,7 @@
             android:textSize="16sp"
             android:textStyle="bold" />
     </FrameLayout>
+
 
     <GridLayout
         android:id="@+id/GridLayout"
@@ -460,13 +467,13 @@
         android:textStyle="bold" />
 
     <TextView
-    android:id="@+id/EnemyATKPText"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginLeft="100px"
-    android:layout_marginTop="150px"
-    android:text="EnemyAttack = 0"
-    android:textSize="25sp" />
+        android:id="@+id/EnemyATKPText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="100px"
+        android:layout_marginTop="150px"
+        android:text="EnemyAttack = 0"
+        android:textSize="25sp" />
 
     <TextView
         android:id="@+id/PlayerATKPText"
@@ -481,10 +488,12 @@
         android:id="@+id/PlayerHealPText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="100px"
-        android:layout_marginTop="350px"
-        android:text="PlayerHeal = 0"
-        android:textSize="25sp" />
+        android:layout_marginLeft="450px"
+        android:layout_marginTop="880px"
+        android:text="+0"
+        android:textColor="#39F15D"
+        android:textSize="50sp"
+        android:textStyle="bold" />
 
 </FrameLayout>
 

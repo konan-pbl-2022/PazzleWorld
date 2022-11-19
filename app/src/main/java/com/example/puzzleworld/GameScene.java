@@ -3,6 +3,8 @@ package com.example.puzzleworld;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -11,6 +13,7 @@ import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -29,6 +32,7 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
     private Timer timer = new Timer();
 
     private GridLayout gridLayout;
+    private FrameLayout HpBar;
     private View mDragView;
 
     private int vertical_num = 6;//縦のドロップ数
@@ -62,16 +66,17 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
     private boolean firstchecked = false;
     float TestTimer = 0;
     float CircleSize = 0.02f;
+    int HpBarSize = 205;
 
     //1,水 2,草 3,火 4,岩
     int Chara1Status[] = {3,10,2};
-    int Chara2Status[] = {2,35,12};
-    int Chara3Status[] = {2,16,5};
+    int Chara2Status[] = {2,35,5};
+    int Chara3Status[] = {2,16,3};
 
 
     int MaxHp,CurrentHp;
     int CharaAttack[] = new int [3];
-    int enemyAttackPoint = 15;
+    int enemyAttackPoint = 5;
     int playerHealPoint = 0;
     int playerAttackPoint = 0;
 
@@ -80,6 +85,7 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_scene);
 
+        ImageView HpBar = findViewById(R.id.HpBar);
         gridLayout = findViewById(R.id.GridLayout);
 
         for (int i = 0; i < gridLayout.getChildCount(); i++) {
@@ -109,13 +115,6 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
         TextView HpText = (TextView) findViewById(R.id.HpText);
         HpText.setText(MaxHp + "/" + CurrentHp + " ");
 
-        TextView AText1 = (TextView) findViewById(R.id.AttackText1);
-        AText1.setText("");
-        TextView AText2 = (TextView) findViewById(R.id.AttackText2);
-        AText2.setText("");
-        TextView AText3 = (TextView) findViewById(R.id.AttackText3);
-        AText3.setText("");
-
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
@@ -129,8 +128,12 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
 
                         if (Mode == 0) FirstSetting(); //初期設定
                         //Mode == 1 ドラッグ＆ドロップ時間。　終わり次第Mode = 2へ
-                        if (Mode == 2) CheckAndCount();
-                        if (Mode == 3 && TestTimer > 0.3) DeleteDrop();
+                        if(Mode == 1) {
+                            for(int i=0;i<3;i++) CharaAttack[i] = 0;
+
+                        }
+                        if(Mode == 2) CheckAndCount();
+                        if(Mode == 3 && TestTimer > 0.3) DeleteDrop();
                         if(Mode == 4) DamageCalc();
                         if(Mode == 5) FillEmpty();//空白を新たなドロップが埋める
                         if(Mode == 6 && TestTimer > 0.5) UpdateSize();//徐々に現れる新ドロップ
@@ -154,6 +157,7 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
                 ObjStatus[i][j] = num;
                 map.put(Rid[i][j],num);
                 DropSet(i,j,num);
+                SetHPBar();
             }
         }
         CheckTester(0);
@@ -295,12 +299,19 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
     }
 
     public void DamageCalc(){
-        system.out.println(Mode);
         playerHealPoint = DeleteCount[0] * ((int)(Chara1Status[1] + Chara2Status[1] + Chara3Status[1])/30);
+        DeleteCount[0] = 0;
+        if(MaxHp < CurrentHp + playerHealPoint)  CurrentHp = MaxHp;
+        else CurrentHp += playerHealPoint;
+        SetHPBar();
+        TextView AText3 = (TextView) findViewById(R.id.PlayerHealPText);
+        AText3.setText("+" +playerHealPoint);
+
         for(int i=1;i<5;i++) {
-            if(Chara1Status[0] == i) CharaAttack[0] += (int)(Chara1Status[2] * DeleteCount[i]) /3;
-            if(Chara2Status[0] == i) CharaAttack[1] += (int)(Chara2Status[2] * DeleteCount[i]) /3;
-            if(Chara3Status[0] == i) CharaAttack[2] += (int)(Chara3Status[2] * DeleteCount[i]) /3;
+            if(Chara1Status[0] == i) CharaAttack[0] += (int)(Chara1Status[2] * DeleteCount[i] * 0.2);
+            if(Chara2Status[0] == i) CharaAttack[1] += (int)(Chara2Status[2] * DeleteCount[i] * 0.2);
+            if(Chara3Status[0] == i) CharaAttack[2] += (int)(Chara3Status[2] * DeleteCount[i] * 0.2);
+            DeleteCount[i] = 0;
         }
 
         TextView AttackText1 = (TextView) findViewById(R.id.AttackText1);
@@ -316,8 +327,9 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
         AText1.setText("EnemyAttack = " +enemyAttackPoint);
         TextView AText2 = (TextView) findViewById(R.id.PlayerATKPText);
         AText2.setText("playerAttack = " +playerAttackPoint);
-        TextView AText3 = (TextView) findViewById(R.id.PlayerHealPText);
-        AText3.setText("PlayerHeal = " +playerHealPoint);
+
+        TextView HpText = (TextView) findViewById(R.id.HpText);
+        HpText.setText(MaxHp + "/" + CurrentHp + " ");
 
         for (int i = 0; i < vertical_num; i++) {
             for (int j = 0; j < horizontal_num; j++) {
@@ -331,7 +343,6 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
     }
 
     private void FillEmpty() {
-        system.out.println(Mode);
         CircleSize = 0.02f;
         for (int i = 0; i < vertical_num; i++) {
             for (int j = 0; j < horizontal_num; j++) {
@@ -352,7 +363,6 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
     }
 
     private void UpdateSize(){
-        system.out.println(Mode);
         if(CircleSize < 0.95f) {
             CircleSize += 0.075f;
             for (int i = 0; i < vertical_num; i++) {
@@ -373,9 +383,17 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
 
     private void LastCheck(){
         CurrentHp -= enemyAttackPoint;
+        SetHPBar();
         TextView HpText = (TextView) findViewById(R.id.HpText);
         HpText.setText(MaxHp + "/" + CurrentHp + " ");
-        for(int i=0;i<3;i++) CharaAttack[i] = 0;
+        playerHealPoint = 0;
+        playerAttackPoint = 0;
+        TextView AText1 = (TextView) findViewById(R.id.AttackText1);
+        AText1.setText("");
+        TextView AText2 = (TextView) findViewById(R.id.AttackText2);
+        AText2.setText("");
+        TextView AText3 = (TextView) findViewById(R.id.AttackText3);
+        AText3.setText("");
         Mode = 1;
     }
 
@@ -400,5 +418,16 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
             }
             system.out.print("\n");
         }
+    }
+
+    private void SetHPBar(){
+            ImageView Imgw = findViewById(R.id.HpBar);
+            Drawable original = this.getResources().getDrawable(R.drawable.hp_bar);
+            Bitmap bitmap = ((BitmapDrawable) original).getBitmap();
+            HpBarSize = 205 * CurrentHp / MaxHp; //DefaultSize : MaxHp = NewSize : CurrentHpから求める
+            if(HpBarSize > 205) HpBarSize = 205;
+            if(HpBarSize < 0) HpBarSize = 1;
+            Drawable drawableA = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, HpBarSize, 6, true));
+            Imgw.setImageDrawable(drawableA);
     }
 }

@@ -66,15 +66,24 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
     private boolean firstchecked = false;
     float TestTimer = 0;
     float CircleSize = 0.02f;
+
+    boolean dragNow = false;
+    float DragTimer = 0;
+    float DefaultDragTimer = 0;
+
     int HpBarSize = 205;
+    int EnemyHpBarSize = 225;
+    int DragTimerSize = 550;
+
+    int EnemyStatus[] = {2,36,7};
 
     //1,水 2,草 3,火 4,岩
     int Chara1Status[] = {3,10,2};
     int Chara2Status[] = {2,35,5};
     int Chara3Status[] = {2,16,3};
 
-
     int MaxHp,CurrentHp;
+    int EnemyDefaultHp,EnemyCurrentHp;
     int CharaAttack[] = new int [3];
     int enemyAttackPoint = 5;
     int playerHealPoint = 0;
@@ -109,6 +118,11 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
                 startActivity(intent);
             }
         });
+        DefaultDragTimer = 6;
+        DragTimer = DefaultDragTimer;
+
+        EnemyDefaultHp = EnemyStatus[1];
+        EnemyCurrentHp = EnemyDefaultHp;
 
         MaxHp = Chara1Status[1] + Chara2Status[1] + Chara3Status[1];
         CurrentHp = MaxHp;
@@ -116,6 +130,14 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
         HpText.setText(MaxHp + "/" + CurrentHp + " ");
         TextView HealText = (TextView) findViewById(R.id.PlayerHealPText);
         HealText.setText("");
+        TextView EnAttackText = (TextView) findViewById(R.id.EnemyATKPText);
+        EnAttackText.setText("");
+        TextView ATKText1 = (TextView) findViewById(R.id.AttackText1);
+        ATKText1.setText("");
+        TextView ATKText2 = (TextView) findViewById(R.id.AttackText2);
+        ATKText2.setText("");
+        TextView ATKText3 = (TextView) findViewById(R.id.AttackText3);
+        ATKText3.setText("");
 
         timer.schedule(new TimerTask() {
             @Override
@@ -126,14 +148,21 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
 
                         //時間を管理するときに使えばイイ！
                         if (TestTimer < 6) TestTimer += 0.1;
-                        else TestTimer = 0;
+                        else {
+                            TestTimer = 0;
+                        }
 
                         if (Mode == 0) FirstSetting(); //初期設定
                         //Mode == 1 ドラッグ＆ドロップ時間。　終わり次第Mode = 2へ
                         if(Mode == 1) {
                             for(int i=0;i<3;i++) CharaAttack[i] = 0;
-
+                            if(dragNow){
+                                system.out.println(DragTimer);
+                                DragTimer -= 0.008;
+                                DragTimerBar();
+                            }
                         }
+
                         if(Mode == 2) CheckAndCount();
                         if(Mode == 3 && TestTimer > 0.3) DeleteDrop();
                         if(Mode == 4) DamageCalc();
@@ -160,6 +189,8 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
                 map.put(Rid[i][j],num);
                 DropSet(i,j,num);
                 SetHPBar();
+                SetEnemyHPBar();
+                DragTimerBar();
             }
         }
         CheckTester(0);
@@ -169,9 +200,10 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
     // 押した時の動作
     public boolean onTouch(View v, MotionEvent motionEvent) {
         if(Mode == 1){
-            if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                mDragView = v;
 
+            if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+
+                mDragView = v;
                 // Viewをドラッグ状態にする。
                     v.startDrag(null, new View.DragShadowBuilder(v), v, 0);
                 v.setAlpha(0);
@@ -184,16 +216,24 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
     //ドラッグ＆ドロップ操作
     public boolean onDrag(View v, DragEvent event) {
         if(Mode == 1) {
-
+            if(DragTimer < 0){
+                mDragView.setAlpha(1);
+                firstchecked = false;
+                dragNow = false;
+                Mode = 2;
+            }
             switch (event.getAction()) {
+
                 // 手を放し、ドラッグが終了した時の処理
                 case DragEvent.ACTION_DRAG_ENDED:
                         mDragView.setAlpha(1);
                         firstchecked = false;
+                        dragNow = false;
                         Mode = 2;
                     break;
                 // ドラッグ中他のViewの上に乗る時、Viewの位置を入れ替える
                 case DragEvent.ACTION_DRAG_LOCATION:
+                        dragNow = true;
                         swap(v, mDragView);
                         break;
             }
@@ -325,10 +365,8 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
 
         playerAttackPoint = CharaAttack[0] + CharaAttack[1] + CharaAttack[2];
 
-        TextView AText1 = (TextView) findViewById(R.id.EnemyATKPText);
-        AText1.setText("EnemyAttack = " +enemyAttackPoint);
-        TextView AText2 = (TextView) findViewById(R.id.PlayerATKPText);
-        AText2.setText("playerAttack = " +playerAttackPoint);
+        TextView EnAttackText = (TextView) findViewById(R.id.EnemyATKPText);
+        EnAttackText.setText("-" +enemyAttackPoint);
 
         TextView HpText = (TextView) findViewById(R.id.HpText);
         HpText.setText(MaxHp + "/" + CurrentHp + " ");
@@ -384,20 +422,28 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
     }
 
     private void LastCheck(){
+        EnemyCurrentHp -= playerAttackPoint;
+        SetEnemyHPBar();
+        system.out.println(EnemyDefaultHp +" / " + EnemyCurrentHp);
+
         CurrentHp -= enemyAttackPoint;
         SetHPBar();
         TextView HpText = (TextView) findViewById(R.id.HpText);
         HpText.setText(MaxHp + "/" + CurrentHp + " ");
         playerHealPoint = 0;
         playerAttackPoint = 0;
-        TextView AText1 = (TextView) findViewById(R.id.AttackText1);
-        AText1.setText("");
-        TextView AText2 = (TextView) findViewById(R.id.AttackText2);
-        AText2.setText("");
-        TextView AText3 = (TextView) findViewById(R.id.AttackText3);
-        AText3.setText("");
+        TextView ATKText1 = (TextView) findViewById(R.id.AttackText1);
+        ATKText1.setText("");
+        TextView ATKText2 = (TextView) findViewById(R.id.AttackText2);
+        ATKText2.setText("");
+        TextView ATKText3 = (TextView) findViewById(R.id.AttackText3);
+        ATKText3.setText("");
         TextView HealText = (TextView) findViewById(R.id.PlayerHealPText);
         HealText.setText("");
+        TextView EnAttackText = (TextView) findViewById(R.id.EnemyATKPText);
+        EnAttackText.setText("");
+        DragTimer = 6;
+        DragTimerBar();
         Mode = 1;
     }
 
@@ -430,8 +476,30 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
             Bitmap bitmap = ((BitmapDrawable) original).getBitmap();
             HpBarSize = 205 * CurrentHp / MaxHp; //DefaultSize : MaxHp = NewSize : CurrentHpから求める
             if(HpBarSize > 205) HpBarSize = 205;
-            if(HpBarSize < 0) HpBarSize = 1;
+            if(HpBarSize < 5) HpBarSize = 5;
             Drawable drawableA = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, HpBarSize, 6, true));
             Imgw.setImageDrawable(drawableA);
+    }
+
+    private void SetEnemyHPBar(){
+        ImageView Imgw2 = findViewById(R.id.EnemyHpBar);
+        Drawable original2 = this.getResources().getDrawable(R.drawable.hp_bar);
+        Bitmap bitmap2 = ((BitmapDrawable) original2).getBitmap();
+        EnemyHpBarSize = 225 * EnemyCurrentHp / EnemyDefaultHp; //DefaultSize : MaxHp = NewSize : CurrentHpから求める
+        if(EnemyHpBarSize > 225) EnemyHpBarSize = 225;
+        if(EnemyHpBarSize < 5) EnemyHpBarSize = 5;
+        Drawable drawableA = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap2, EnemyHpBarSize, 6, true));
+        Imgw2.setImageDrawable(drawableA);
+    }
+
+    private void DragTimerBar(){
+        ImageView Imgw3 = findViewById(R.id.TimerBar);
+        Drawable original3 = this.getResources().getDrawable(R.drawable.hp_bar);
+        Bitmap bitmap3 = ((BitmapDrawable) original3).getBitmap();
+        DragTimerSize = (int)(550 * DragTimer / DefaultDragTimer); //DefaultSize : MaxHp = NewSize : CurrentHpから求める
+        if(DragTimerSize > 550) DragTimerSize = 550;
+        if(DragTimerSize < 5) DragTimerSize = 5;
+        Drawable drawableA = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap3, DragTimerSize, 6, true));
+        Imgw3.setImageDrawable(drawableA);
     }
 }

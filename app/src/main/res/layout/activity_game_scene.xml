@@ -10,7 +10,7 @@
         android:layout_width="600dp"
         android:layout_height="520dp"
         android:layout_marginLeft="0px"
-        android:layout_marginTop="845px"
+        android:layout_marginTop="815px"
         android:background="#4C5CCC">
 
     </FrameLayout>
@@ -25,35 +25,64 @@
     </FrameLayout>
 
     <FrameLayout
-        android:layout_width="362dp"
-        android:layout_height="22dp"
-        android:layout_marginLeft="68px"
-        android:layout_marginTop="864px"
+        android:layout_width="222dp"
+        android:layout_height="12dp"
+        android:layout_marginLeft="258px"
+        android:layout_marginTop="454px"
         android:background="#4A363E">
 
     </FrameLayout>
 
     <FrameLayout
-        android:layout_width="362dp"
-        android:layout_height="22dp"
-        android:layout_marginLeft="68px"
-        android:layout_marginTop="864px"
-        >
+        android:layout_width="222dp"
+        android:layout_height="12dp"
+        android:layout_marginLeft="258px"
+        android:layout_marginTop="454px">
 
         <ImageView
-            android:id="@+id/HpBar"
+            android:id="@+id/EnemyHpBar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="-970px"
-          android:src="@drawable/hp_bar" />
+            android:layout_marginLeft="-595px"
+            android:src="@drawable/hp_bar" />
 
     </FrameLayout>
 
     <FrameLayout
         android:layout_width="362dp"
-        android:layout_height="wrap_content"
+        android:layout_height="22dp"
         android:layout_marginLeft="68px"
-        android:layout_marginTop="864px">
+        android:layout_marginTop="834px"
+        android:background="#4A363E">
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="362dp"
+        android:layout_height="8dp"
+        android:layout_marginLeft="68px"
+        android:layout_marginTop="904px"
+        android:background="#4A363E">
+
+        <ImageView
+            android:id="@+id/TimerBar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="-935px"
+            android:src="@drawable/hp_bar" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="362dp"
+        android:layout_height="22dp"
+        android:layout_marginLeft="68px"
+        android:layout_marginTop="834px">
+
+        <ImageView
+            android:id="@+id/HpBar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="-975px"
+          android:src="@drawable/hp_bar" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -72,8 +101,8 @@
             android:textColor="#FFFFFF"
             android:textSize="16sp"
             android:textStyle="bold" />
-    </FrameLayout>
 
+    </FrameLayout>
 
     <GridLayout
         android:id="@+id/GridLayout"
@@ -379,7 +408,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="65px"
-        android:layout_marginTop="580px"
+        android:layout_marginTop="550px"
         android:columnCount="5"
         tools:context=".GameScene">
 
@@ -441,7 +470,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="65px"
-        android:layout_marginTop="510px"
+        android:layout_marginTop="480px"
         android:text="0"
         android:textSize="25sp"
         android:textStyle="bold" />
@@ -451,7 +480,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="410px"
-        android:layout_marginTop="510px"
+        android:layout_marginTop="480px"
         android:text="0"
         android:textSize="25sp"
         android:textStyle="bold" />
@@ -461,7 +490,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="750px"
-        android:layout_marginTop="510px"
+        android:layout_marginTop="480px"
         android:text="0"
         android:textSize="25sp"
         android:textStyle="bold" />
@@ -470,19 +499,12 @@
         android:id="@+id/EnemyATKPText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="100px"
-        android:layout_marginTop="150px"
-        android:text="EnemyAttack = 0"
-        android:textSize="25sp" />
-
-    <TextView
-        android:id="@+id/PlayerATKPText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="100px"
-        android:layout_marginTop="250px"
-        android:text="PlayerAttack = 0"
-        android:textSize="25sp" />
+        android:layout_marginLeft="450px"
+        android:layout_marginTop="600px"
+        android:text="-0"
+        android:textColor="#E9000D"
+        android:textSize="50sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/PlayerHealPText"
@@ -494,6 +516,13 @@
         android:textColor="#39F15D"
         android:textSize="50sp"
         android:textStyle="bold" />
+
+    <ImageView
+        android:id="@+id/EnemyImg"
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:layout_marginTop="30px"
+        android:src="@drawable/enemy1" />
 
 </FrameLayout>
 

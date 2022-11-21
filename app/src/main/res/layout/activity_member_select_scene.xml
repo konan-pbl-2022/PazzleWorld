@@ -268,18 +268,6 @@
         app:layout_constraintVertical_bias="0.225"
         tools:srcCompat="@tools:sample/avatars" />
 
-    <Button
-        android:id="@+id/button5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Button"
-        app:layout_constraintBottom_toTopOf="@+id/mainChara1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
-
     <ImageView
         android:id="@+id/imageView3"
         android:layout_width="121dp"
@@ -430,7 +418,8 @@
         android:id="@+id/button1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Button"
+        android:text="編成"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/background"
         app:layout_constraintEnd_toStartOf="@+id/button2"
         app:layout_constraintHorizontal_bias="0.5"
@@ -441,7 +430,8 @@
         android:id="@+id/button3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Button"
+        android:text="ガチャ"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -452,13 +442,27 @@
         android:id="@+id/button2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Button"
+        android:text="ステージ"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/button3"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/button1"
         app:layout_constraintTop_toBottomOf="@+id/member15"
         app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/isi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        app:fontFamily="sans-serif-black"
+        app:layout_constraintBottom_toTopOf="@+id/imageView1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.056"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.484" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

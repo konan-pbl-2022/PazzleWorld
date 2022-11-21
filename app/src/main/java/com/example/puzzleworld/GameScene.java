@@ -78,11 +78,17 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
     int EnemyHpBarSize = 225;
     int DragTimerSize = 550;
 
+    /////外部から変数を受け取るエリア
+    int Stage = 1;
+
     int EnemyStatus[] = {2,36,7};
     //1,水 2,草 3,火 4,岩
     int Chara1Status[] = {3,10,2};
     int Chara2Status[] = {2,35,5};
     int Chara3Status[] = {2,16,3};
+    ///////////////////////
+    int MaxPhase[] = {0,2,2,3};
+    int CurrentPhase = 1;
 
     int MaxHp,CurrentHp;
     int EnemyDefaultHp,EnemyCurrentHp;
@@ -147,6 +153,7 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
+
                         //黒画面透明度
                         if(Mode == 8) {
                             BlackWindow.setAlpha(BlackWindowAlpha);
@@ -180,7 +187,8 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
                         if(Mode == 6 && TestTimer > 0.5) UpdateSize();//徐々に現れる新ドロップ
                         if(Mode == 7) LastCheck();//攻撃、ダメージ処理
                         if(Mode == 8) GameOver();
-                        if(Mode == 9) NextMove();//次のターンへの以降
+                        if(Mode == 9) NextEnemySpawn();
+                        if(Mode == 10) NextMove();//次のターンへの以降
                     }
                 });
             }
@@ -360,10 +368,10 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
         TextView AText3 = (TextView) findViewById(R.id.PlayerHealPText);
         AText3.setText("+" +playerHealPoint);
 
-        for(int i=1;i<5;i++) {
-            if(Chara1Status[0] == i) CharaAttack[0] += (int)(Chara1Status[2] * DeleteCount[i] * 0.2);
-            if(Chara2Status[0] == i) CharaAttack[1] += (int)(Chara2Status[2] * DeleteCount[i] * 0.2);
-            if(Chara3Status[0] == i) CharaAttack[2] += (int)(Chara3Status[2] * DeleteCount[i] * 0.2);
+        for(int i=1;i<5;i++) {//0.3~0.4
+            if(Chara1Status[0] == i) CharaAttack[0] += (int)(Chara1Status[2] * DeleteCount[i] * 0.3);
+            if(Chara2Status[0] == i) CharaAttack[1] += (int)(Chara2Status[2] * DeleteCount[i] * 0.3);
+            if(Chara3Status[0] == i) CharaAttack[2] += (int)(Chara3Status[2] * DeleteCount[i] * 0.3);
             DeleteCount[i] = 0;
         }
 
@@ -447,16 +455,42 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
 
         if(CurrentHp < 0) Mode = 8;//GameOver
         else if (EnemyCurrentHp < 0) Mode = 9;//敵死亡
-        else Mode = 9;
+        else Mode = 10;
     }
 
     private void GameOver(){
+        PlayerStatus.GameClear = false;
+        PlayerStatus.LastPhase = CurrentPhase-1;
         if(BlackWindowAlpha > 0.99){
             Intent intent = new Intent(GameScene.this, ResultScene.class);
             startActivity(intent);
             Mode = -1;
         }
-        //ステージ選択画面に戻す
+    }
+
+    private void NextEnemySpawn(){
+        PlayerStatus.LastPhase = CurrentPhase;
+        if(MaxPhase[Stage] == CurrentPhase) {
+            PlayerStatus.GameClear = true;
+            ImageView EnemyImg = findViewById(R.id.EnemyImg);
+            Drawable drawable = getResources().getDrawable(R.drawable.circle6);
+            EnemyImg.setImageDrawable(drawable);
+
+            Intent intent = new Intent(GameScene.this, ResultScene.class);
+            startActivity(intent);
+
+        }
+        else {
+            CurrentPhase += 1;
+            ImageView EnemyImg = findViewById(R.id.EnemyImg);
+            Drawable drawable = getResources().getDrawable(R.drawable.ssr2);
+            EnemyImg.setImageDrawable(drawable);
+            //次の敵のステータス
+            EnemyDefaultHp = 80;
+            EnemyCurrentHp = EnemyDefaultHp;
+            enemyAttackPoint = 10;
+        }
+        Mode = 10;
     }
 
     private void NextMove(){
@@ -470,6 +504,7 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
         HealText.setText("");
         TextView EnAttackText = (TextView) findViewById(R.id.EnemyATKPText);
         EnAttackText.setText("");
+        SetEnemyHPBar();
         Mode = 1;
     }
 

@@ -1,8 +1,11 @@
 package com.example.puzzleworld;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -10,7 +13,9 @@ import android.os.Handler;
 import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -29,6 +34,7 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
     private Timer timer = new Timer();
 
     private GridLayout gridLayout;
+    private FrameLayout HpBar;
     private View mDragView;
 
     private int vertical_num = 6;//縦のドロップ数
@@ -58,20 +64,30 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
     int ObjStatus[][] = new int[vertical_num][horizontal_num];//ドロップデザインセット
     int mapchecker[][] = new int[vertical_num][horizontal_num];
 
+    float BlackWindowAlpha = 1;
     private int leftId;
     private boolean firstchecked = false;
-    float TimerCounter = 0;
     float TestTimer = 0;
+    float CircleSize = 0.02f;
 
+    boolean dragNow = false;
+    float DragTimer = 0;
+    float DefaultDragTimer = 0;
+
+    int HpBarSize = 205;
+    int EnemyHpBarSize = 225;
+    int DragTimerSize = 550;
+
+    int EnemyStatus[] = {2,36,7};
     //1,水 2,草 3,火 4,岩
     int Chara1Status[] = {3,10,2};
-    int Chara2Status[] = {2,35,12};
-    int Chara3Status[] = {2,16,5};
-
+    int Chara2Status[] = {2,35,5};
+    int Chara3Status[] = {2,16,3};
 
     int MaxHp,CurrentHp;
-    int CharaAttack[] =  new int [3];
-    int enemyAttackPoint = 15;
+    int EnemyDefaultHp,EnemyCurrentHp;
+    int CharaAttack[] = new int [3];
+    int enemyAttackPoint = 5;
     int playerHealPoint = 0;
     int playerAttackPoint = 0;
 
@@ -80,6 +96,7 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_scene);
 
+        ImageView BlackWindow = findViewById(R.id.BlackWindow);
         gridLayout = findViewById(R.id.GridLayout);
 
         for (int i = 0; i < gridLayout.getChildCount(); i++) {
@@ -103,18 +120,26 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
                 startActivity(intent);
             }
         });
+        DefaultDragTimer = 6;
+        DragTimer = DefaultDragTimer;
+
+        EnemyDefaultHp = EnemyStatus[1];
+        EnemyCurrentHp = EnemyDefaultHp;
 
         MaxHp = Chara1Status[1] + Chara2Status[1] + Chara3Status[1];
         CurrentHp = MaxHp;
         TextView HpText = (TextView) findViewById(R.id.HpText);
         HpText.setText(MaxHp + "/" + CurrentHp + " ");
-
-        TextView AText1 = (TextView) findViewById(R.id.AttackText1);
-        AText1.setText("");
-        TextView AText2 = (TextView) findViewById(R.id.AttackText2);
-        AText2.setText("");
-        TextView AText3 = (TextView) findViewById(R.id.AttackText3);
-        AText3.setText("");
+        TextView HealText = (TextView) findViewById(R.id.PlayerHealPText);
+        HealText.setText("");
+        TextView EnAttackText = (TextView) findViewById(R.id.EnemyATKPText);
+        EnAttackText.setText("");
+        TextView ATKText1 = (TextView) findViewById(R.id.AttackText1);
+        ATKText1.setText("");
+        TextView ATKText2 = (TextView) findViewById(R.id.AttackText2);
+        ATKText2.setText("");
+        TextView ATKText3 = (TextView) findViewById(R.id.AttackText3);
+        ATKText3.setText("");
 
         timer.schedule(new TimerTask() {
             @Override
@@ -122,37 +147,48 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
+                        //黒画面透明度
+                        if(Mode == 8) {
+                            BlackWindow.setAlpha(BlackWindowAlpha);
+                            BlackWindowAlpha += 0.005;
+                        }else{
+                            BlackWindow.setAlpha(BlackWindowAlpha);
+                            if(BlackWindowAlpha < 0)BlackWindowAlpha = 0;
+                            else BlackWindowAlpha -= 0.005;
+                        }
 
                         //時間を管理するときに使えばイイ！
-                        if (TestTimer < 60) TestTimer += 0.5;
+                        if (TestTimer < 6) TestTimer += 0.1;
                         else {
-                            TimerCounter += 1;//毎秒TimerCounterが1増えていく
                             TestTimer = 0;
                         }
 
                         if (Mode == 0) FirstSetting(); //初期設定
                         //Mode == 1 ドラッグ＆ドロップ時間。　終わり次第Mode = 2へ
-                        if (Mode == 2) CheckAndCount();
-                        //if (Mode == 3) DropReDraw();
+                        if(Mode == 1) {
+                            for(int i=0;i<3;i++) CharaAttack[i] = 0;
+                            if(dragNow){
+                                system.out.println(DragTimer);
+                                DragTimer -= 0.008;
+                                DragTimerBar();
+                            }
+                        }
+                        if(Mode == 2) CheckAndCount();
+                        if(Mode == 3 && TestTimer > 0.3) DeleteDrop();
                         if(Mode == 4) DamageCalc();
+                        if(Mode == 5) FillEmpty();//空白を新たなドロップが埋める
+                        if(Mode == 6 && TestTimer > 0.5) UpdateSize();//徐々に現れる新ドロップ
+                        if(Mode == 7) LastCheck();//攻撃、ダメージ処理
+                        if(Mode == 8) GameOver();
+                        if(Mode == 9) NextMove();//次のターンへの以降
                     }
                 });
             }
-        }, 0, 8);
+        }, 0, 7);
     }
-
 
     @Override
     public void onBackPressed() {} //戻るボタンの無効化
-
-    /*public void run() {
-
-        //ここで毎フレームの処理
-        TextView HpText = (TextView)findViewById(R.id.HpText);
-        HpText.setText(MaxHp + "/" +CurrentHp+" ");
-        m_handler.postDelayed( this::run, 10);
-    }*/
-
 
     private void FirstSetting() {
         for(int i=0;i<vertical_num;i++) {
@@ -164,10 +200,12 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
                 ObjStatus[i][j] = num;
                 map.put(Rid[i][j],num);
                 DropSet(i,j,num);
+                SetHPBar();
+                SetEnemyHPBar();
+                DragTimerBar();
             }
         }
         CheckTester(0);
-        CheckTester(1);
         Mode = 1;
     }
 
@@ -176,55 +214,46 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
         if(Mode == 1){
             if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
                 mDragView = v;
-
                 // Viewをドラッグ状態にする。
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    v.startDragAndDrop(null, new View.DragShadowBuilder(v), v, 0);
-                }
+                v.startDrag(null, new View.DragShadowBuilder(v), v, 0);
                 v.setAlpha(0);
             }
-
+            return true;
         }
-        return true;
+        else  return true;
     }
 
     //ドラッグ＆ドロップ操作
     public boolean onDrag(View v, DragEvent event) {
         if(Mode == 1) {
-
             switch (event.getAction()) {
+
                 // 手を放し、ドラッグが終了した時の処理
-                // ドラッグしているViewを表示させる。
-
                 case DragEvent.ACTION_DRAG_ENDED:
-                    //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                         mDragView.setAlpha(1);
-
-                        for(int i=0;i<vertical_num;i++) {
-                            for (int j = 0; j < horizontal_num; j++) {
-                                if (leftId == Rid[i][j]) {
-                                    //ObjStatus[i][j] = map.get(mDragView.getId());
-                                }
-                            }
-                        }
                         firstchecked = false;
+                        dragNow = false;
                         Mode = 2;
-                    //}
                     break;
-                // ドラッグ中他のViewの上に乗る時の処理
-                // Viewの位置を入れ替える
+                // ドラッグ中他のViewの上に乗る時、Viewの位置を入れ替える
                 case DragEvent.ACTION_DRAG_LOCATION:
-
+                    if(DragTimer < 0){
+                        mDragView.setAlpha(1);
+                        firstchecked = false;
+                        dragNow = false;
+                        Mode = 2;
+                    }else{
+                        dragNow = true;
                         swap(v, mDragView);
-
-                    break;
+                        break;
+                    }
             }
         }
         return true;
     }
 
     private void swap(View v1, View v2) {
-        int a=0,b=0,c=0,d = 0,temp = 0,temp2=0;
+        int a=0,b=0,c=0,d=0,temp = 0,temp2=0;
         // 同じViewなら入れ替える必要なし
         if (v1 == v2) return;
         if(!firstchecked)
@@ -267,7 +296,6 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
                 }
             }
         }
-
         for(int i=0;i<vertical_num;i++) {
             for (int j = 0; j < horizontal_num; j++) {
                 //判定用を設定
@@ -288,49 +316,55 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
                 }
             }
         }
-        //確認用
-        for(int i=0;i<vertical_num;i++) {
-            system.out.print(i + " : ");
-            for (int j = 0; j < horizontal_num; j++) {
-                if(mapchecker[i][j] == 9) system.out.print("-");
-                else system.out.print(mapchecker[i][j]);
-            }
-            system.out.print("\n");
-        }
-        CheckTester(0);
-        CheckTester(1);
-
-        //消したドロップの数を全属性数える
+        //そろっているドロップの数を全属性数える
         for(int del=0;del<5;del++) {
-                for (int i = 0; i < vertical_num; i++) {
-                    for (int j = 0; j < horizontal_num; j++) {
-                        if(del == mapchecker[i][j]) {
-                            DeleteCount[del] += 1;//数をカウント
-                            DeleteSum += 1;
-                                map.remove(Rid[i][j]);
-                                map.put(Rid[i][j],5);
-                            ObjStatus[i][j] = 5;
-                            DropSet(i, j, map.get(Rid[i][j]));
-                        }
+            for (int i = 0; i < vertical_num; i++) {
+                for (int j = 0; j < horizontal_num; j++) {
+                    if(del == mapchecker[i][j]) {
+                        DeleteCount[del] += 1;//数をカウント
+                        DeleteSum++;
+                        ObjStatus[i][j] = 5;
                     }
                 }
-                system.out.println(del + ":" + DeleteCount[del]);
             }
+            system.out.println(del + ":" + DeleteCount[del]);
+        }
 
-
+        CheckTester(0);
         TestTimer = 0;
-        TimerCounter = 0;
+        Mode = 3;
+    }
+
+    public void DeleteDrop(){
+        for (int i = 0; i < vertical_num; i++) {
+            for (int j = 0; j < horizontal_num; j++) {
+                if(ObjStatus[i][j] == 5) {
+                    map.remove(Rid[i][j]);
+                    map.put(Rid[i][j],5);
+                    ObjStatus[i][j] = 6;
+                    DropSet(i, j, map.get(Rid[i][j]));
+                    TestTimer = 0;
+                    return;
+                }
+            }
+        }
         Mode = 4;
     }
 
     public void DamageCalc(){
-
         playerHealPoint = DeleteCount[0] * ((int)(Chara1Status[1] + Chara2Status[1] + Chara3Status[1])/30);
-        for(int i=1;i<5;i++)
-        {
-            if(Chara1Status[0] == i) CharaAttack[0] += (Chara1Status[2] * DeleteCount[i]) /2;
-            if(Chara2Status[0] == i) CharaAttack[1] += (Chara2Status[2] * DeleteCount[i]) /2;
-            if(Chara3Status[0] == i) CharaAttack[2] += (Chara3Status[2] * DeleteCount[i]) /2;
+        DeleteCount[0] = 0;
+        if(MaxHp < CurrentHp + playerHealPoint)  CurrentHp = MaxHp;
+        else CurrentHp += playerHealPoint;
+        SetHPBar();
+        TextView AText3 = (TextView) findViewById(R.id.PlayerHealPText);
+        AText3.setText("+" +playerHealPoint);
+
+        for(int i=1;i<5;i++) {
+            if(Chara1Status[0] == i) CharaAttack[0] += (int)(Chara1Status[2] * DeleteCount[i] * 0.2);
+            if(Chara2Status[0] == i) CharaAttack[1] += (int)(Chara2Status[2] * DeleteCount[i] * 0.2);
+            if(Chara3Status[0] == i) CharaAttack[2] += (int)(Chara3Status[2] * DeleteCount[i] * 0.2);
+            DeleteCount[i] = 0;
         }
 
         TextView AttackText1 = (TextView) findViewById(R.id.AttackText1);
@@ -340,27 +374,103 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
         TextView AttackText3 = (TextView) findViewById(R.id.AttackText3);
         AttackText3.setText(CharaAttack[2]+"");
 
-
         playerAttackPoint = CharaAttack[0] + CharaAttack[1] + CharaAttack[2];
 
-        TextView AText1 = (TextView) findViewById(R.id.EnemyATKPText);
-        AText1.setText("EnemyAttack = " +enemyAttackPoint);
-        TextView AText2 = (TextView) findViewById(R.id.PlayerATKPText);
-        AText2.setText("playerAttack = " +playerAttackPoint);
-        TextView AText3 = (TextView) findViewById(R.id.PlayerHealPText);
-        AText3.setText("PlayerHeal = " +playerHealPoint);
-
-        CurrentHp -= enemyAttackPoint;
         TextView HpText = (TextView) findViewById(R.id.HpText);
         HpText.setText(MaxHp + "/" + CurrentHp + " ");
 
         for (int i = 0; i < vertical_num; i++) {
             for (int j = 0; j < horizontal_num; j++) {
-                if(ObjStatus[i][j] == 5); //そろった場所が一か所でも残ってる場合
+                if(ObjStatus[i][j] == 6) {
+                    Mode = 5;//そろった場所が一か所でも残ってる場合
+                    return;
+                }
             }
         }
+        Mode = 7; //全てのチェックが終了
+    }
 
-        Mode = 5;
+    private void FillEmpty() {
+        CircleSize = 0.02f;
+        for (int i = 0; i < vertical_num; i++) {
+            for (int j = 0; j < horizontal_num; j++) {
+                if(ObjStatus[i][j] == 6) {
+                    circle[i][j] = findViewById(Rid[i][j]);
+                    circle[i][j].setScaleX(CircleSize);
+                    circle[i][j].setScaleY(CircleSize);
+                    int num = rand.nextInt(5);//ドロップの属性をここでランダムで決める
+                    ObjStatus[i][j] = num;
+                    map.remove(Rid[i][j]);
+                    map.put(Rid[i][j],num);
+                    DropSet(i,j,num);
+                }
+            }
+        }
+        TestTimer = 0;
+        Mode = 6;
+    }
+
+    private void UpdateSize(){
+        if(CircleSize < 0.95f) {
+            CircleSize += 0.075f;
+            for (int i = 0; i < vertical_num; i++) {
+                for (int j = 0; j < horizontal_num; j++) {
+                    if(mapchecker[i][j] != 9) {
+                        circle[i][j].setScaleX(CircleSize);
+                        circle[i][j].setScaleY(CircleSize);
+                    }
+                }
+            }
+            TestTimer = 0;
+            return;
+        }else{
+            CircleSize = 0.95f;
+            Mode = 2; // 全て空白になるまで繰り返す
+        }
+    }
+
+    private void LastCheck(){
+        EnemyCurrentHp -= playerAttackPoint;
+        SetEnemyHPBar();
+        system.out.println(EnemyDefaultHp +" / " + EnemyCurrentHp);
+
+        CurrentHp -= enemyAttackPoint;
+        SetHPBar();
+        TextView HpText = (TextView) findViewById(R.id.HpText);
+        HpText.setText(MaxHp + "/" + CurrentHp + " ");
+        playerHealPoint = 0;
+        playerAttackPoint = 0;
+        TextView EnAttackText = (TextView) findViewById(R.id.EnemyATKPText);
+        EnAttackText.setText("-" +enemyAttackPoint);
+        DragTimer = 6;
+        DragTimerBar();
+
+        if(CurrentHp < 0) Mode = 8;//GameOver
+        else if (EnemyCurrentHp < 0) Mode = 9;//敵死亡
+        else Mode = 9;
+    }
+
+    private void GameOver(){
+        if(BlackWindowAlpha > 0.99){
+            Intent intent = new Intent(GameScene.this, ResultScene.class);
+            startActivity(intent);
+            Mode = -1;
+        }
+        //ステージ選択画面に戻す
+    }
+
+    private void NextMove(){
+        TextView ATKText1 = (TextView) findViewById(R.id.AttackText1);
+        ATKText1.setText("");
+        TextView ATKText2 = (TextView) findViewById(R.id.AttackText2);
+        ATKText2.setText("");
+        TextView ATKText3 = (TextView) findViewById(R.id.AttackText3);
+        ATKText3.setText("");
+        TextView HealText = (TextView) findViewById(R.id.PlayerHealPText);
+        HealText.setText("");
+        TextView EnAttackText = (TextView) findViewById(R.id.EnemyATKPText);
+        EnAttackText.setText("");
+        Mode = 1;
     }
 
     //ドロップに与えられた属性によって表示する画像を変更する
@@ -370,16 +480,52 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
         Img.setImageDrawable(drawable);
     }
 
-    //引数0でObjStatus,1でImageViewのId
+    //引数0でObjStatus,1でImageViewのId,2でmapChecker
     private void CheckTester(int num){
-
         for(int i=0;i<vertical_num;i++) {
             system.out.print(i + " : ");
             for (int j = 0; j < horizontal_num; j++) {
                 if(num == 0) system.out.print(ObjStatus[i][j]+ " ");
                 if(num == 1) system.out.print(Rid[i][j]+ " ");
+                if(num == 2){
+                    if(mapchecker[i][j] == 9) system.out.print("-");
+                    else system.out.print(mapchecker[i][j]);
+                }
             }
             system.out.print("\n");
         }
+    }
+
+    private void SetHPBar(){
+        ImageView Imgw = findViewById(R.id.HpBar);
+        Drawable original = this.getResources().getDrawable(R.drawable.hp_bar);
+        Bitmap bitmap = ((BitmapDrawable) original).getBitmap();
+        HpBarSize = 205 * CurrentHp / MaxHp; //DefaultSize : MaxHp = NewSize : CurrentHpから求める
+        if(HpBarSize > 205) HpBarSize = 205;
+        if(HpBarSize < 5) HpBarSize = 5;
+        Drawable drawableA = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, HpBarSize, 6, true));
+        Imgw.setImageDrawable(drawableA);
+    }
+
+    private void SetEnemyHPBar(){
+        ImageView Imgw2 = findViewById(R.id.EnemyHpBar);
+        Drawable original2 = this.getResources().getDrawable(R.drawable.hp_bar);
+        Bitmap bitmap2 = ((BitmapDrawable) original2).getBitmap();
+        EnemyHpBarSize = 225 * EnemyCurrentHp / EnemyDefaultHp; //DefaultSize : MaxHp = NewSize : CurrentHpから求める
+        if(EnemyHpBarSize > 225) EnemyHpBarSize = 225;
+        if(EnemyHpBarSize < 5) EnemyHpBarSize = 5;
+        Drawable drawableA = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap2, EnemyHpBarSize, 6, true));
+        Imgw2.setImageDrawable(drawableA);
+    }
+
+    private void DragTimerBar(){
+        ImageView Imgw3 = findViewById(R.id.TimerBar);
+        Drawable original3 = this.getResources().getDrawable(R.drawable.timer_bar);
+        Bitmap bitmap3 = ((BitmapDrawable) original3).getBitmap();
+        DragTimerSize = (int)(550 * DragTimer / DefaultDragTimer); //DefaultSize : MaxHp = NewSize : CurrentHpから求める
+        if(DragTimerSize > 550) DragTimerSize = 550;
+        if(DragTimerSize < 5) DragTimerSize = 5;
+        Drawable drawableA = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap3, DragTimerSize, 6, true));
+        Imgw3.setImageDrawable(drawableA);
     }
 }

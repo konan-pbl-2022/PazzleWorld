@@ -176,7 +176,7 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
                             if(dragNow){
                                 system.out.println(DragTimer);
                                 DragTimer -= 0.008;
-                                DragTimerBar();
+                                if(TestTimer>0.7) DragTimerBar();
                             }
                         }
                         if(Mode == 2) CheckAndCount();
@@ -502,7 +502,7 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
         PlayerStatus.LastPhase = CurrentPhase;
         if(MaxPhase[Stage] == CurrentPhase) {
             PlayerStatus.GameClear = true;
-
+            PlayerStatus.CanPlayStage = Stage + 1;
             Intent intent = new Intent(GameScene.this, ResultScene.class);
             startActivity(intent);
         }
@@ -608,5 +608,6 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
         if(DragTimerSize < 5) DragTimerSize = 5;
         Drawable drawableA = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap3, DragTimerSize, 6, true));
         Imgw3.setImageDrawable(drawableA);
+        TestTimer = 0;
     }
 }

@@ -34,7 +34,6 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
     private Timer timer = new Timer();
 
     private GridLayout gridLayout;
-    private FrameLayout HpBar;
     private View mDragView;
 
     private int vertical_num = 6;//縦のドロップ数
@@ -43,7 +42,6 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
     Random rand = new Random();//ランダム;
 
     private int Mode = 0; //"1_Drag&Drop","2_Check&Count","3_NewSet","4_Action"//モード
-    int NextMode = 0;
 
     int Rid[][] = {{R.id.Cir0,R.id.Cir1,R.id.Cir2,R.id.Cir3,R.id.Cir4,R.id.Cir5},
             {R.id.Cir6,R.id.Cir7,R.id.Cir8,R.id.Cir9,R.id.Cir10,R.id.Cir11},
@@ -97,6 +95,8 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
     int playerHealPoint = 0;
     int playerAttackPoint = 0;
 
+    int NextMode = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -138,6 +138,8 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
         HpText.setText(MaxHp + "/" + CurrentHp + " ");
         TextView HealText = (TextView) findViewById(R.id.PlayerHealPText);
         HealText.setText("");
+        TextView PlayerATKText = (TextView) findViewById(R.id.PlayerPText);
+        PlayerATKText.setText("");
         TextView EnAttackText = (TextView) findViewById(R.id.EnemyATKPText);
         EnAttackText.setText("");
         TextView ATKText1 = (TextView) findViewById(R.id.AttackText1);
@@ -165,10 +167,7 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
                         }
 
                         //時間を管理するときに使えばイイ！
-                        if (TestTimer < 6) TestTimer += 0.1;
-                        else {
-                            TestTimer = 0;
-                        }
+                        TestTimer += 0.1;
 
                         if (Mode == 0) FirstSetting(); //初期設定
                         //Mode == 1 ドラッグ＆ドロップ時間。　終わり次第Mode = 2へ
@@ -185,10 +184,13 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
                         if(Mode == 4) DamageCalc();
                         if(Mode == 5) FillEmpty();//空白を新たなドロップが埋める
                         if(Mode == 6 && TestTimer > 0.5) UpdateSize();//徐々に現れる新ドロップ
-                        if(Mode == 7) LastCheck();//攻撃、ダメージ処理
+                        if(Mode == 7) PlayerAttackTurn();//攻撃、ダメージ処理
                         if(Mode == 8) GameOver();
                         if(Mode == 9) NextEnemySpawn();
-                        if(Mode == 10) NextMove();//次のターンへの以降
+                        if(Mode == 10) EnemyAttackTurn();
+                        if(Mode == 11) NextMove();//次のターンへの以降
+
+                        if(Mode == 99) SystemWaitTime();//次の
                     }
                 });
             }
@@ -211,6 +213,8 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
                 SetHPBar();
                 SetEnemyHPBar();
                 DragTimerBar();
+                ImageView dropCover = findViewById(R.id.dropCover);
+                dropCover.setVisibility(View.INVISIBLE);
             }
         }
         CheckTester(0);
@@ -360,6 +364,7 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
     }
 
     public void DamageCalc(){
+        //1,水 2,草 3,火 4,岩
         playerHealPoint = DeleteCount[0] * ((int)(Chara1Status[1] + Chara2Status[1] + Chara3Status[1])/30);
         DeleteCount[0] = 0;
         if(MaxHp < CurrentHp + playerHealPoint)  CurrentHp = MaxHp;
@@ -437,25 +442,47 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
         }
     }
 
-    private void LastCheck(){
+    private void PlayerAttackTurn(){
+        ImageView dropCover = findViewById(R.id.dropCover);
+        dropCover.setVisibility(View.VISIBLE);
+
+        TextView HealText = (TextView) findViewById(R.id.PlayerHealPText);
+        HealText.setText("");
         EnemyCurrentHp -= playerAttackPoint;
         SetEnemyHPBar();
-        system.out.println(EnemyDefaultHp +" / " + EnemyCurrentHp);
+        TextView PlayerATKText = (TextView) findViewById(R.id.PlayerPText);
+        PlayerATKText.setText("-" +playerAttackPoint);
 
+        if(CurrentHp < 0) Mode = 8;//GameOver
+        else if (EnemyCurrentHp < 0) {
+            ImageView EnemyImg = findViewById(R.id.EnemyImg);
+            Drawable drawable = getResources().getDrawable(R.drawable.circle6);
+            EnemyImg.setImageDrawable(drawable);
+            TestTimer = 0;
+            NextMode = 9;//敵死亡
+            Mode = 99;//2秒待ち専用モード
+        }
+        else {
+            TestTimer = 0;
+            NextMode = 10;
+            Mode = 99;//2秒待ち専用モード
+        }
+    }
+
+    private void EnemyAttackTurn(){
+        ResetPlayerUI();
+
+        system.out.println(EnemyDefaultHp +" / " + EnemyCurrentHp);
         CurrentHp -= enemyAttackPoint;
         SetHPBar();
         TextView HpText = (TextView) findViewById(R.id.HpText);
         HpText.setText(MaxHp + "/" + CurrentHp + " ");
-        playerHealPoint = 0;
-        playerAttackPoint = 0;
         TextView EnAttackText = (TextView) findViewById(R.id.EnemyATKPText);
         EnAttackText.setText("-" +enemyAttackPoint);
-        DragTimer = 6;
-        DragTimerBar();
 
-        if(CurrentHp < 0) Mode = 8;//GameOver
-        else if (EnemyCurrentHp < 0) Mode = 9;//敵死亡
-        else Mode = 10;
+        TestTimer = 0;
+        NextMode = 11;
+        Mode = 99;//2秒待ち専用モード
     }
 
     private void GameOver(){
@@ -469,16 +496,15 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
     }
 
     private void NextEnemySpawn(){
+        ResetPlayerUI();
+        TextView EnAttackText = (TextView) findViewById(R.id.EnemyATKPText);
+        EnAttackText.setText("");
         PlayerStatus.LastPhase = CurrentPhase;
         if(MaxPhase[Stage] == CurrentPhase) {
             PlayerStatus.GameClear = true;
-            ImageView EnemyImg = findViewById(R.id.EnemyImg);
-            Drawable drawable = getResources().getDrawable(R.drawable.circle6);
-            EnemyImg.setImageDrawable(drawable);
 
             Intent intent = new Intent(GameScene.this, ResultScene.class);
             startActivity(intent);
-
         }
         else {
             CurrentPhase += 1;
@@ -490,10 +516,39 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
             EnemyCurrentHp = EnemyDefaultHp;
             enemyAttackPoint = 10;
         }
-        Mode = 10;
+        TestTimer = 0;
+        Mode = 11;
     }
 
     private void NextMove(){
+        if(TestTimer > 30){
+            TextView EnAttackText = (TextView) findViewById(R.id.EnemyATKPText);
+            EnAttackText.setText("");
+            ResetPlayerUI();
+            SetEnemyHPBar();
+            DragTimer = 6;
+            DragTimerBar();
+            ImageView dropCover = findViewById(R.id.dropCover);
+            dropCover.setVisibility(View.INVISIBLE);
+            Mode = 1;
+        }
+    }
+
+    //ドロップに与えられた属性によって表示する画像を変更する
+    public void DropSet(int i, int j, int Num) {
+        ImageView Img = findViewById(Rid[i][j]);
+        Drawable drawable = getResources().getDrawable(DropDesign[Num]);
+        Img.setImageDrawable(drawable);
+    }
+
+    //次のモード移行を待っている間
+    private void SystemWaitTime(){
+        if(TestTimer > 20) Mode = NextMode;
+    }
+
+    private void ResetPlayerUI(){
+        playerHealPoint = 0;
+        playerAttackPoint = 0;
         TextView ATKText1 = (TextView) findViewById(R.id.AttackText1);
         ATKText1.setText("");
         TextView ATKText2 = (TextView) findViewById(R.id.AttackText2);
@@ -502,17 +557,8 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
         ATKText3.setText("");
         TextView HealText = (TextView) findViewById(R.id.PlayerHealPText);
         HealText.setText("");
-        TextView EnAttackText = (TextView) findViewById(R.id.EnemyATKPText);
-        EnAttackText.setText("");
-        SetEnemyHPBar();
-        Mode = 1;
-    }
-
-    //ドロップに与えられた属性によって表示する画像を変更する
-    public void DropSet(int i, int j, int Num) {
-        ImageView Img = findViewById(Rid[i][j]);
-        Drawable drawable = getResources().getDrawable(DropDesign[Num]);
-        Img.setImageDrawable(drawable);
+        TextView PlayerATKText = (TextView) findViewById(R.id.PlayerPText);
+        PlayerATKText.setText("");
     }
 
     //引数0でObjStatus,1でImageViewのId,2でmapChecker

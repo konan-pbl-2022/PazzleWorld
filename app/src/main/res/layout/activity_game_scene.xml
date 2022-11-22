@@ -9,6 +9,20 @@
     android:splitMotionEvents="false"
     >
 
+    <FrameLayout
+        android:layout_width="600dp"
+        android:layout_height="520dp"
+        android:layout_marginLeft="0px"
+        android:layout_marginTop="0px"
+        android:background="#A0A0A0">
+
+        <ImageView
+            android:id="@+id/BlackWindow"
+            android:layout_width="800dp"
+            android:layout_height="800dp"
+            android:layout_marginTop="0px" />
+    </FrameLayout>
+
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -37,7 +51,7 @@
         android:layout_height="520dp"
         android:layout_marginLeft="0px"
         android:layout_marginTop="815px"
-        android:background="#A4ACAC">
+        android:background="#946C6C">
 
     </FrameLayout>
 
@@ -476,7 +490,19 @@
 
     </GridLayout>
 
+    <FrameLayout
+        android:layout_width="600dp"
+        android:layout_height="520dp"
+        android:layout_marginLeft="0px"
+        android:layout_marginTop="930px">
 
+        <ImageView
+            android:id="@+id/dropCover"
+            android:layout_width="800dp"
+            android:layout_height="800dp"
+            android:layout_marginTop="0px"
+            android:background="#B5594040" />
+    </FrameLayout>
 
     <TextView
         android:id="@+id/AttackText1"
@@ -537,12 +563,24 @@
         android:layout_marginTop="30px"
         android:src="@drawable/enemy1" />
 
+    <TextView
+        android:id="@+id/PlayerPText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="450px"
+        android:layout_marginTop="230px"
+        android:text="-000"
+        android:textColor="#000000"
+        android:textSize="50sp"
+        android:textStyle="bold" />
+
     <ImageView
         android:id="@+id/BlackWindow"
         android:layout_width="800dp"
         android:layout_height="800dp"
-        android:layout_marginTop="0px"
-        android:src="@drawable/black_window"/>
+        android:layout_marginTop="0px"/>
+    <!--android:src="@drawable/black_window"/>-->
+
 
 
 </FrameLayout>

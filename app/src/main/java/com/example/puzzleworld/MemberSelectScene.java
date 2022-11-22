@@ -300,6 +300,7 @@ public class MemberSelectScene extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
         transitionButton[2].setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(MemberSelectScene.this,GachaScene.class);
@@ -318,6 +319,7 @@ public class MemberSelectScene extends AppCompatActivity {
     }
 
 //    リソースをIdとして割り当てる
+
     int assignId(String s, int i) {
         Resources res = getResources();
         @SuppressLint("DiscouragedApi") int Id = res.getIdentifier(s + (i + 1), "id", getPackageName());
@@ -340,7 +342,7 @@ public class MemberSelectScene extends AppCompatActivity {
         }
     }
 
-//    交換処理
+    //    交換処理
     void membersButtonClicked(ImageButton[] mCButton, int n) {
         if(d.chara[n].getPossession() && duplication(n)) {
             switch (clicked) {
@@ -370,7 +372,9 @@ public class MemberSelectScene extends AppCompatActivity {
 
 
 
+
 //    メインキャラの重複を無効にする処理
+
     boolean duplication(int n) {
         for(int i = 0; i < d.mainCharaNum; i++) {
             if(d.mainChara[i] == d.chara[n]) {

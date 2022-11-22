@@ -16,9 +16,7 @@ public class ResultScene extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result_scene);
 
-
         TextView scoreLabel = findViewById(R.id.scoreLabel);
-
 
         int score = getIntent().getIntExtra("SCORE", 0);
         scoreLabel.setText(score + "");

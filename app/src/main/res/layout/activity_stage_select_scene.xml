@@ -77,7 +77,6 @@
         android:id="@+id/textView"
         android:layout_width="111dp"
         android:layout_height="43dp"
-        android:text="gacha stone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.082"

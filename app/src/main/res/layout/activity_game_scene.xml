@@ -1,17 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".GameScene">
+    tools:context=".GameScene"
+    android:splitMotionEvents="false"
+    >
 
     <FrameLayout
         android:layout_width="600dp"
         android:layout_height="520dp"
         android:layout_marginLeft="0px"
-        android:layout_marginTop="845px"
-        android:background="#4C5CCC">
+        android:layout_marginTop="0px"
+        android:background="#A0A0A0">
+
+        <ImageView
+            android:id="@+id/BlackWindow"
+            android:layout_width="800dp"
+            android:layout_height="800dp"
+            android:layout_marginTop="0px" />
+    </FrameLayout>
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/stselebutton"
+            android:layout_width="130dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="20px"
+            android:layout_marginTop="15px"
+            android:text="Stage Select" />
+
+        <Button
+            android:id="@+id/Resultbutton"
+            android:layout_width="90dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="800px"
+            android:layout_marginTop="15px"
+            android:text="Result" />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="600dp"
+        android:layout_height="520dp"
+        android:layout_marginLeft="0px"
+        android:layout_marginTop="815px"
+        android:background="#946C6C">
 
     </FrameLayout>
 
@@ -20,26 +60,31 @@
         android:layout_height="360dp"
         android:layout_marginLeft="68px"
         android:layout_marginTop="940px"
-        android:background="#B3A8A8">
+        android:background="#E3E8E8">
 
     </FrameLayout>
 
     <FrameLayout
-        android:layout_width="362dp"
-        android:layout_height="22dp"
-        android:layout_marginLeft="68px"
-        android:layout_marginTop="864px"
+        android:layout_width="222dp"
+        android:layout_height="12dp"
+        android:layout_marginLeft="258px"
+        android:layout_marginTop="454px"
         android:background="#4A363E">
 
     </FrameLayout>
 
     <FrameLayout
-        android:id="@+id/HpBar"
-        android:layout_width="362dp"
-        android:layout_height="22dp"
-        android:layout_marginLeft="68px"
-        android:layout_marginTop="864px"
-        android:background="#2EBC0E">
+        android:layout_width="222dp"
+        android:layout_height="12dp"
+        android:layout_marginLeft="258px"
+        android:layout_marginTop="454px">
+
+        <ImageView
+            android:id="@+id/EnemyHpBar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="-595px"
+            android:src="@drawable/hp_bar" />
 
     </FrameLayout>
 
@@ -47,7 +92,37 @@
         android:layout_width="362dp"
         android:layout_height="22dp"
         android:layout_marginLeft="68px"
-        android:layout_marginTop="864px">
+        android:layout_marginTop="834px"
+        android:background="#4A363E">
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="362dp"
+        android:layout_height="8dp"
+        android:layout_marginLeft="68px"
+        android:layout_marginTop="904px"
+        android:background="#4A363E">
+
+        <ImageView
+            android:id="@+id/TimerBar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="-935px"
+            android:src="@drawable/timer_bar" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="362dp"
+        android:layout_height="22dp"
+        android:layout_marginLeft="68px"
+        android:layout_marginTop="834px">
+
+        <ImageView
+            android:id="@+id/HpBar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="-975px"
+          android:src="@drawable/hp_bar" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -66,6 +141,7 @@
             android:textColor="#FFFFFF"
             android:textSize="16sp"
             android:textStyle="bold" />
+
     </FrameLayout>
 
     <GridLayout
@@ -75,7 +151,8 @@
         android:layout_marginLeft="70px"
         android:layout_marginTop="940px"
         android:columnCount="6"
-        tools:context=".GameScene">
+        tools:context=".GameScene"
+        android:splitMotionEvents="false">
 
         <ImageView
             android:id="@+id/Cir0"
@@ -372,7 +449,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="65px"
-        android:layout_marginTop="580px"
+        android:layout_marginTop="550px"
         android:columnCount="5"
         tools:context=".GameScene">
 
@@ -413,76 +490,97 @@
 
     </GridLayout>
 
-    <Button
-        android:id="@+id/stselebutton"
-        android:layout_width="130dp"
-        android:layout_height="40dp"
-        android:layout_marginLeft="20px"
-        android:layout_marginTop="15px"
-        android:text="Stage Select" />
+    <FrameLayout
+        android:layout_width="600dp"
+        android:layout_height="520dp"
+        android:layout_marginLeft="0px"
+        android:layout_marginTop="930px">
 
-    <Button
-        android:id="@+id/Resultbutton"
-        android:layout_width="90dp"
-        android:layout_height="40dp"
-        android:layout_marginLeft="800px"
-        android:layout_marginTop="15px"
-        android:text="Result" />
+        <ImageView
+            android:id="@+id/dropCover"
+            android:layout_width="800dp"
+            android:layout_height="800dp"
+            android:layout_marginTop="0px"
+            android:background="#B5594040" />
+    </FrameLayout>
 
     <TextView
         android:id="@+id/AttackText1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="65px"
-        android:layout_marginTop="510px"
+        android:layout_marginTop="480px"
         android:text="0"
-        android:textSize="25sp" />
+        android:textSize="25sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/AttackText2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="410px"
-        android:layout_marginTop="510px"
+        android:layout_marginTop="480px"
         android:text="0"
-        android:textSize="25sp" />
+        android:textSize="25sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/AttackText3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="750px"
-        android:layout_marginTop="510px"
+        android:layout_marginTop="480px"
         android:text="0"
-        android:textSize="25sp" />
+        android:textSize="25sp"
+        android:textStyle="bold" />
 
     <TextView
-    android:id="@+id/EnemyATKPText"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginLeft="100px"
-    android:layout_marginTop="150px"
-    android:text="EnemyAttack = 0"
-    android:textSize="25sp" />
-
-    <TextView
-        android:id="@+id/PlayerATKPText"
+        android:id="@+id/EnemyATKPText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="100px"
-        android:layout_marginTop="250px"
-        android:text="PlayerAttack = 0"
-        android:textSize="25sp" />
+        android:layout_marginLeft="450px"
+        android:layout_marginTop="600px"
+        android:text="-0"
+        android:textColor="#E9000D"
+        android:textSize="50sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/PlayerHealPText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="100px"
-        android:layout_marginTop="350px"
-        android:text="PlayerHeal = 0"
-        android:textSize="25sp" />
+        android:layout_marginLeft="450px"
+        android:layout_marginTop="880px"
+        android:text="+0"
+        android:textColor="#39F15D"
+        android:textSize="50sp"
+        android:textStyle="bold" />
+
+    <ImageView
+        android:id="@+id/EnemyImg"
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:layout_marginTop="30px"
+        android:src="@drawable/enemy1" />
+
+    <TextView
+        android:id="@+id/PlayerPText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="450px"
+        android:layout_marginTop="230px"
+        android:text="-000"
+        android:textColor="#000000"
+        android:textSize="50sp"
+        android:textStyle="bold" />
+
+    <ImageView
+        android:id="@+id/BlackWindow"
+        android:layout_width="800dp"
+        android:layout_height="800dp"
+        android:layout_marginTop="0px"/>
+    <!--android:src="@drawable/black_window"/>-->
+
+
 
 </FrameLayout>
-
-

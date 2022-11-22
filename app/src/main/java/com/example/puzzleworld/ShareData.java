@@ -4,9 +4,9 @@ import android.annotation.SuppressLint;
 import android.app.Application;
 
 public class ShareData extends Application {
-    int isi = 0;
-    int charaNum = 16;
-    int mainCharaNum = 3;
+    public int isi = 0;
+    public int charaNum = 16;
+    public int mainCharaNum = 3;
     public  Character[] chara = new Character[charaNum];
     public Character[] mainChara = new Character[mainCharaNum];
 
@@ -22,10 +22,10 @@ public class ShareData extends Application {
             mainChara[i] = new Character();
         }
 
-        chara[0].setStatus(1,1,1,1,1,0,false);
-        chara[1].setStatus(1,2,2,2,2,0,false);
-        chara[2].setStatus(1,3,3,3, 3,0,false);
-        chara[3].setStatus(1,4,4,4, 4,0,false);
+        chara[0].setStatus(1,1,1,1,1,0,true);
+        chara[1].setStatus(1,2,2,2,2,0,true);
+        chara[2].setStatus(1,3,3,3, 3,0,true);
+        chara[3].setStatus(1,4,4,4, 4,0,true);
         chara[4].setStatus(1,1,1,1, 1,0,false);
         chara[5].setStatus(1,1,1,1, 1,0,false);
         chara[6].setStatus(1,1,1,1, 1,0,false);
@@ -38,10 +38,7 @@ public class ShareData extends Application {
         chara[13].setStatus(1,1,1,1, 1,0,false);
         chara[14].setStatus(1,1,1,1, 1,0,false);
         chara[15].setStatus(1,1,1,1, 1,0,false);
-        chara[0].setPossession(true);
-        chara[1].setPossession(true);
-        chara[2].setPossession(true);
-        chara[3].setPossession(true);
+
 
 
         chara[0].image = getResources().getDrawable(R.drawable.n1);

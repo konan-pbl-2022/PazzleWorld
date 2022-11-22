@@ -60,7 +60,7 @@ public class MemberSelectScene extends AppCompatActivity {
 
         TextView isi = new TextView(this);
         isi = (TextView) findViewById(R.id.isi);
-        isi.setText("聖晶石：" + d.isi);
+        isi.setText("聖晶石：" + PlayerStatus.GachaStone);
 
 //上三体のButtonを押したときの処理
         mainCharaButton[0].setOnClickListener(new View.OnClickListener() {

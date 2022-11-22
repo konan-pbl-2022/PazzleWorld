@@ -11,7 +11,6 @@ import android.widget.TextView;
 import java.lang.reflect.Member;
 
 public class StageSelectScene extends AppCompatActivity {
-    int GachaStone = 10;//ガチャ石
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,9 +19,9 @@ public class StageSelectScene extends AppCompatActivity {
 
         //ガチャ石表示
         TextView textView = (TextView)findViewById(R.id.textView);
-        textView.setText(String.valueOf(/*PlayerStatus./*/GachaStone));
+        textView.setText(String.valueOf(PlayerStatus.GachaStone));
 
-                /*System.out.println(PlayerStatus.GachaStone);*/
+                System.out.println(PlayerStatus.GachaStone);
 
         //編成ボタン
         Button nextButton1 = (Button)findViewById(R.id.button2);
@@ -57,9 +56,11 @@ public class StageSelectScene extends AppCompatActivity {
         //ステージ2ボタン
         Button nextButton4 = (Button)findViewById(R.id.button6);
         //表示
-        //if(PlayerStatus.CanPlayStage > 2){
-            nextButton4.setVisibility(View.GONE);
-        //}
+        if(PlayerStatus.CanPlayStage >= 2){
+            nextButton4.setVisibility(View.VISIBLE);
+        }else{
+            nextButton4.setVisibility(View.INVISIBLE);
+        }
         //画面切り替え
         nextButton4.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){

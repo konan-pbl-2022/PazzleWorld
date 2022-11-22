@@ -20,9 +20,6 @@ public class Character extends AppCompatActivity {
     //　画像
     Drawable image;
 
-//    確率
-    float probability;
-
     //　コンストラクタ
     public void setStatus(int atb, int a, int h, int r, int l, int n, boolean b) {
         attribute = atb;
@@ -30,6 +27,7 @@ public class Character extends AppCompatActivity {
         hp = h;
         recovery = r;
         level = l;
+        number = n;
         possession = b;
     }
     // セッター

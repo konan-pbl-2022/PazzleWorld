@@ -30,19 +30,11 @@
 
         <Button
             android:id="@+id/stselebutton"
-            android:layout_width="130dp"
+            android:layout_width="80dp"
             android:layout_height="40dp"
             android:layout_marginLeft="20px"
             android:layout_marginTop="15px"
-            android:text="Stage Select" />
-
-        <Button
-            android:id="@+id/Resultbutton"
-            android:layout_width="90dp"
-            android:layout_height="40dp"
-            android:layout_marginLeft="800px"
-            android:layout_marginTop="15px"
-            android:text="Result" />
+            android:text="Resign" />
 
     </FrameLayout>
 
@@ -454,7 +446,7 @@
         tools:context=".GameScene">
 
         <ImageView
-            android:id="@+id/Cir34"
+            android:id="@+id/Chara1"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_row="0"
@@ -468,7 +460,7 @@
             android:layout_column="1" />
 
         <ImageView
-            android:id="@+id/Cir34"
+            android:id="@+id/Chara2"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_row="0"
@@ -481,12 +473,12 @@
             android:layout_row="0"
             android:layout_column="3" />
         <ImageView
-            android:id="@+id/Cir34"
+            android:id="@+id/Chara3"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_row="0"
             android:layout_column="4"
-            android:src="@drawable/r4" />
+            android:src="@drawable/n1" />
 
     </GridLayout>
 
@@ -504,31 +496,64 @@
             android:background="#B5594040" />
     </FrameLayout>
 
+    <ImageView
+        android:id="@+id/type1"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="65px"
+        android:layout_marginTop="480px"
+        android:src="@drawable/circle" />
+
     <TextView
         android:id="@+id/AttackText1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="65px"
+        android:layout_marginLeft="145px"
         android:layout_marginTop="480px"
         android:text="0"
         android:textSize="25sp"
         android:textStyle="bold" />
+
+    <ImageView
+        android:id="@+id/type2"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="410px"
+        android:layout_marginTop="480px"
+        android:src="@drawable/circle" />
 
     <TextView
         android:id="@+id/AttackText2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="410px"
+        android:layout_marginLeft="490px"
         android:layout_marginTop="480px"
         android:text="0"
         android:textSize="25sp"
         android:textStyle="bold" />
 
+    <ImageView
+        android:id="@+id/type3"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="755px"
+        android:layout_marginTop="480px"
+        android:src="@drawable/circle" />
+
+    <ImageView
+        android:id="@+id/EnemyType"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="255px"
+        android:layout_marginTop="80px"
+        android:src="@drawable/circle" />
+
+
     <TextView
         android:id="@+id/AttackText3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="750px"
+        android:layout_marginLeft="835px"
         android:layout_marginTop="480px"
         android:text="0"
         android:textSize="25sp"
@@ -562,6 +587,14 @@
         android:layout_height="160dp"
         android:layout_marginTop="30px"
         android:src="@drawable/circle6" />
+
+    <ImageView
+        android:id="@+id/EnemyImg"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginLeft="850px"
+        android:layout_marginTop="30px"
+        android:src="@drawable/type" />
 
     <TextView
         android:id="@+id/PlayerPText"

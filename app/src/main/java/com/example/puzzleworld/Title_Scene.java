@@ -11,6 +11,9 @@ import android.widget.Button;
 public class Title_Scene extends AppCompatActivity {
 
     @Override
+    public void onBackPressed() {} //戻るボタンの無効化
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_title__scene);

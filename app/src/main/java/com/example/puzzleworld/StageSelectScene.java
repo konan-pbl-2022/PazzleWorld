@@ -47,6 +47,7 @@ public class StageSelectScene extends AppCompatActivity {
         Button nextButton3 = (Button)findViewById(R.id.button5);
         nextButton3.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
+                PlayerStatus.SelectStage = 1;
                 Intent intent = new Intent(StageSelectScene.this, GameScene.class);
                 startActivity(intent);
             }
@@ -64,6 +65,7 @@ public class StageSelectScene extends AppCompatActivity {
         //画面切り替え
         nextButton4.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
+                PlayerStatus.SelectStage = 2;
                 Intent intent = new Intent(StageSelectScene.this, GameScene.class);
                 startActivity(intent);
             }

@@ -79,6 +79,7 @@ public class GachaScene extends AppCompatActivity {
                         gachaButton.setVisibility(View.VISIBLE);
                         ResultView.setVisibility(View.VISIBLE);
 
+                        /*ガチャのシステム*/
                         if(GachaStone > 0){
                             PlayerStatus.GachaStone -= 1;
                             /*ガチャ石の表示の修正*/

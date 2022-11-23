@@ -561,7 +561,7 @@
         android:layout_width="match_parent"
         android:layout_height="160dp"
         android:layout_marginTop="30px"
-        android:src="@drawable/enemy1" />
+        android:src="@drawable/circle6" />
 
     <TextView
         android:id="@+id/PlayerPText"

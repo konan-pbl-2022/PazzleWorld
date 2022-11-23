@@ -7,4 +7,7 @@ public class PlayerStatus {
     //GameScene --> resultScene用
     public static boolean GameClear = false;
     public static int LastPhase = 0;
+
+    //StageSelectScene --> GameScene用
+    public static int SelectStage = 0;
 }

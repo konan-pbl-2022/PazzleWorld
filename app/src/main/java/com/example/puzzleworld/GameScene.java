@@ -1,21 +1,18 @@
 package com.example.puzzleworld;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -28,6 +25,7 @@ import java.util.TimerTask;
 
 public class GameScene extends AppCompatActivity implements View.OnTouchListener, View.OnDragListener{
 
+    ShareData d;
     private System system;
     private Handler handler = new Handler();
 
@@ -53,15 +51,10 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
     //ドラッグ＆ドロップ後のステータスの入れ替えが難しかったため、Mapを採用
     Map<Integer,Integer> map = new HashMap<>();
 
-    int PlayerDesign[] = {R.drawable.n1,R.drawable.n2,R.drawable.n3,R.drawable.n4,
-            R.drawable.r1,R.drawable.r2,R.drawable.r3,R.drawable.r4,
-            R.drawable.sr1,R.drawable.sr2,R.drawable.sr3,R.drawable.sr4,
-            R.drawable.ssr1,R.drawable.ssr2,R.drawable.ssr3,R.drawable.ssr4};
-
     int EnemyDesign[] = {R.drawable.enemy1,R.drawable.enemy2,R.drawable.enemy3};
 
-    int DropDesign[] = {R.drawable.circle,R.drawable.circle2,R.drawable.circle3,
-            R.drawable.circle4,R.drawable.circle5,R.drawable.circle6};
+    int DropDesign[] = {R.drawable.circle,R.drawable.circle5,R.drawable.circle2,
+            R.drawable.circle4,R.drawable.circle3,R.drawable.circle6};
     int DeleteCount[] = {0,0,0,0,0};
     int DeleteSum = 0;
 
@@ -83,14 +76,11 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
     int EnemyHpBarSize = 225;
     int DragTimerSize = 550;
 
+    int EnemyStatus[][] = {/*s1*/{1,36,5},{1,70,8}, /*s2*/{2,64,7},{3,115,13}};
+    //1,水 2,草 3,火 4,岩
     /////外部から変数を受け取るエリア
     int Stage = 1;
-
-    int EnemyStatus[][] = {/*s1*/{4,36,5},{4,70,8}, /*s2*/{4,64,7},{3,115,13}};
-    //1,水 2,草 3,火 4,岩
-    int Chara1Status[] = {3,10,2};
-    int Chara2Status[] = {2,35,5};
-    int Chara3Status[] = {2,16,3};
+    int CharaStatus[][] = new int[3][4];//0属性,1攻撃,2体力,3回復
     ///////////////////////
     int MaxPhase[] = {0,2,2,3};
     int CurrentPhase = 1;
@@ -108,6 +98,7 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_scene);
+        d =(ShareData)getApplication();
 
         ImageView BlackWindow = findViewById(R.id.BlackWindow);
         gridLayout = findViewById(R.id.GridLayout);
@@ -126,20 +117,20 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
             }
         });
 
-        Button ResultButton = (Button) findViewById(R.id.Resultbutton);
-        ResultButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(GameScene.this, ResultScene.class);
-                startActivity(intent);
-            }
-        });
         DefaultDragTimer = 6;
         DragTimer = DefaultDragTimer;
 
-        MaxHp = Chara1Status[1] + Chara2Status[1] + Chara3Status[1];
-        CurrentHp = MaxHp;
-        TextView HpText = (TextView) findViewById(R.id.HpText);
-        HpText.setText(MaxHp + "/" + CurrentHp + " ");
+        Stage = PlayerStatus.SelectStage;
+        ImageView CharaImg1 = findViewById(R.id.Chara1);
+        Drawable drawable1 = d.mainChara[0].getImage();
+        CharaImg1.setImageDrawable(drawable1);
+        ImageView CharaImg2 = findViewById(R.id.Chara2);
+        Drawable drawable2 = d.mainChara[1].getImage();
+        CharaImg2.setImageDrawable(drawable2);
+        ImageView CharaImg3 = findViewById(R.id.Chara3);
+        Drawable drawable3 = d.mainChara[2].getImage();
+        CharaImg3.setImageDrawable(drawable3);
+
         TextView HealText = (TextView) findViewById(R.id.PlayerHealPText);
         HealText.setText("");
         TextView PlayerATKText = (TextView) findViewById(R.id.PlayerPText);
@@ -178,7 +169,6 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
                         if(Mode == 1) {
                             for(int i=0;i<3;i++) CharaAttack[i] = 0;
                             if(dragNow){
-                                system.out.println(DragTimer);
                                 DragTimer -= 0.008;
                                 if(TestTimer>0.7) DragTimerBar();
                             }
@@ -205,7 +195,19 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
     public void onBackPressed() {} //戻るボタンの無効化
 
     private void FirstSetting() {
-        Stage = PlayerStatus.SelectStage;
+        for(int i=0;i<3;i++){
+            CharaStatus[i][0] = d.mainChara[i].getAttribute();//属性
+            CharaStatus[i][1] = d.mainChara[i].getAttack();//攻撃
+            CharaStatus[i][2] = d.mainChara[i].getHp();//体力
+            CharaStatus[i][3] = d.mainChara[i].getHp();//回復
+
+            system.out.print(CharaStatus[i][0] + " ");
+        }
+        MaxHp = CharaStatus[0][2] + CharaStatus[1][2] + CharaStatus[2][2];
+        CurrentHp = MaxHp;
+        TextView HpText = (TextView) findViewById(R.id.HpText);
+        HpText.setText(MaxHp + "/" + CurrentHp + " ");
+
         for(int i=0;i<vertical_num;i++) {
             for(int j=0;j<horizontal_num;j++) {
                 circle[i][j] = findViewById(Rid[i][j]);
@@ -223,7 +225,6 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
                 dropCover.setVisibility(View.INVISIBLE);
             }
         }
-        CheckTester(0);
         Mode = 1;
     }
 
@@ -370,27 +371,26 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
     }
 
     public void DamageCalc(){
-        //1,水 2,草 3,火 4,岩
-        playerHealPoint = DeleteCount[0] * ((int)(Chara1Status[1] + Chara2Status[1] + Chara3Status[1])/30);
+        //1,水 2,火 3,草 4,岩
+        playerHealPoint = DeleteCount[0] * (CharaStatus[0][1] + CharaStatus[1][1] + CharaStatus[2][1]);
         DeleteCount[0] = 0;
-        if(MaxHp < CurrentHp + playerHealPoint)  CurrentHp = MaxHp;
+        if(MaxHp < CurrentHp + playerHealPoint) CurrentHp = MaxHp;
         else CurrentHp += playerHealPoint;
         SetHPBar();
         TextView AText3 = (TextView) findViewById(R.id.PlayerHealPText);
         AText3.setText("+" +playerHealPoint);
 
-        for(int i=1;i<5;i++) {//0.3~0.4
-            if(Chara1Status[0] == i) CharaAttack[0] += (int)(Chara1Status[2] * DeleteCount[i] * 0.3);
-            if(Chara2Status[0] == i) CharaAttack[1] += (int)(Chara2Status[2] * DeleteCount[i] * 0.3);
-            if(Chara3Status[0] == i) CharaAttack[2] += (int)(Chara3Status[2] * DeleteCount[i] * 0.3);
+        for(int i=1;i<5;i++) {//i...属性　j...キャラ
+            for(int j=0;j<3;j++){
+                if(CharaStatus[j][0] == i) CharaAttack[j] += (int)(CharaStatus[j][1] * DeleteCount[i] * 0.5);
+            }
             DeleteCount[i] = 0;
         }
-
         TextView AttackText1 = (TextView) findViewById(R.id.AttackText1);
-        AttackText1.setText(CharaAttack[0]+"");
         TextView AttackText2 = (TextView) findViewById(R.id.AttackText2);
-        AttackText2.setText(CharaAttack[1]+"");
         TextView AttackText3 = (TextView) findViewById(R.id.AttackText3);
+        AttackText1.setText(CharaAttack[0]+"");
+        AttackText2.setText(CharaAttack[1]+"");
         AttackText3.setText(CharaAttack[2]+"");
 
         playerAttackPoint = CharaAttack[0] + CharaAttack[1] + CharaAttack[2];
@@ -508,7 +508,6 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
         PlayerStatus.LastPhase = CurrentPhase;
         if(MaxPhase[Stage] == CurrentPhase) {
             PlayerStatus.GameClear = true;
-            PlayerStatus.CanPlayStage = Stage + 1;
             Intent intent = new Intent(GameScene.this, ResultScene.class);
             startActivity(intent);
         }

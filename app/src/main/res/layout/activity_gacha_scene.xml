@@ -2,34 +2,38 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     tools:context=".GachaScene">
 
     <ImageView
         android:id="@+id/background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:contentDescription="TODO"
         android:scaleType="centerCrop"
         android:src="@drawable/background"
-        tools:layout_editor_absoluteX="-53dp"
-        tools:layout_editor_absoluteY="-16dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/ResultView"
-        android:layout_width="129dp"
-        android:layout_height="93dp"
+        android:layout_width="193dp"
+        android:layout_height="186dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.409" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/protoButton"
+        android:id="@+id/gachaButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="PUSH!!"
+        android:text="ガチャる"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -41,42 +45,41 @@
         android:id="@+id/ToHensei"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="hensei"
+        android:text="編成"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.226"
+        app:layout_constraintHorizontal_bias="0.244"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.939" />
+        app:layout_constraintVertical_bias="0.936" />
 
     <Button
         android:id="@+id/ToStage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="STAGE"
+        android:text="ステージ"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.835"
+        app:layout_constraintHorizontal_bias="0.763"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.939" />
+        app:layout_constraintVertical_bias="0.936" />
 
     <TextView
         android:id="@+id/stoneView"
-        android:layout_width="64dp"
-        android:layout_height="45dp"
-        android:text="aiueo"
+        android:layout_width="133dp"
+        android:layout_height="44dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.088"
+        app:layout_constraintHorizontal_bias="0.151"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.048" />
+        app:layout_constraintVertical_bias="0.061" />
 
     <Switch
         android:id="@+id/emiButton"
-        android:layout_width="108dp"
-        android:layout_height="37dp"
+        android:layout_width="119dp"
+        android:layout_height="48dp"
         android:text="排出率"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -87,13 +90,48 @@
 
     <TextView
         android:id="@+id/emiRateView"
-        android:layout_width="140dp"
-        android:layout_height="68dp"
+        android:layout_width="169dp"
+        android:layout_height="167dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/background"
-        app:layout_constraintHorizontal_bias="0.94"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.144" />
+        app:layout_constraintVertical_bias="0.152" />
+
+    <TextView
+        android:id="@+id/checkText"
+        android:layout_width="195dp"
+        android:layout_height="302dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.504"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/background"
+        app:layout_constraintVertical_bias="0.603" />
+
+    <Button
+        android:id="@+id/cancelButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="戻る"
+        app:layout_constraintBottom_toBottomOf="@+id/checkText"
+        app:layout_constraintEnd_toEndOf="@+id/checkText"
+        app:layout_constraintHorizontal_bias="0.074"
+        app:layout_constraintStart_toStartOf="@+id/checkText"
+        app:layout_constraintTop_toTopOf="@+id/checkText"
+        app:layout_constraintVertical_bias="0.968" />
+
+    <Button
+        android:id="@+id/okButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="引く"
+        app:layout_constraintBottom_toBottomOf="@+id/checkText"
+        app:layout_constraintEnd_toEndOf="@+id/checkText"
+        app:layout_constraintHorizontal_bias="0.897"
+        app:layout_constraintStart_toStartOf="@+id/checkText"
+        app:layout_constraintTop_toTopOf="@+id/checkText"
+        app:layout_constraintVertical_bias="0.968" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

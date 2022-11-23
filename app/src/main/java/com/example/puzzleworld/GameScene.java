@@ -87,6 +87,7 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
 
     int MaxHp,CurrentHp;
     int EnemyDefaultHp,EnemyCurrentHp;
+    int NowEnemyType;
     int CharaAttack[] = new int [3];
     int enemyAttackPoint = 0;
     int playerHealPoint = 0;
@@ -121,6 +122,7 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
         DragTimer = DefaultDragTimer;
 
         Stage = PlayerStatus.SelectStage;
+
         ImageView CharaImg1 = findViewById(R.id.Chara1);
         Drawable drawable1 = d.mainChara[0].getImage();
         CharaImg1.setImageDrawable(drawable1);
@@ -200,8 +202,7 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
             CharaStatus[i][1] = d.mainChara[i].getAttack();//攻撃
             CharaStatus[i][2] = d.mainChara[i].getHp();//体力
             CharaStatus[i][3] = d.mainChara[i].getHp();//回復
-
-            system.out.print(CharaStatus[i][0] + " ");
+            typeBox(i,CharaStatus[i][0]);
         }
         MaxHp = CharaStatus[0][2] + CharaStatus[1][2] + CharaStatus[2][2];
         CurrentHp = MaxHp;
@@ -217,12 +218,13 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
                 ObjStatus[i][j] = num;
                 map.put(Rid[i][j],num);
                 DropSet(i,j,num);
-                SetHPBar();
+                SetHPBar("Player");
                 EnemyBox();
-                SetEnemyHPBar();
+                SetHPBar("Enemy");
                 DragTimerBar();
                 ImageView dropCover = findViewById(R.id.dropCover);
                 dropCover.setVisibility(View.INVISIBLE);
+                typeBox(3,NowEnemyType);
             }
         }
         Mode = 1;
@@ -371,21 +373,39 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
     }
 
     public void DamageCalc(){
-        //1,水 2,火 3,草 4,岩
-        playerHealPoint = DeleteCount[0] * (CharaStatus[0][1] + CharaStatus[1][1] + CharaStatus[2][1]);
+        //岩水火草
+        playerHealPoint = DeleteCount[0] * (int)((CharaStatus[0][1] + CharaStatus[1][1] + CharaStatus[2][1])*0.2);
         DeleteCount[0] = 0;
         if(MaxHp < CurrentHp + playerHealPoint) CurrentHp = MaxHp;
         else CurrentHp += playerHealPoint;
-        SetHPBar();
+        SetHPBar("Player");
         TextView AText3 = (TextView) findViewById(R.id.PlayerHealPText);
         AText3.setText("+" +playerHealPoint);
 
-        for(int i=1;i<5;i++) {//i...属性　j...キャラ
-            for(int j=0;j<3;j++){
-                if(CharaStatus[j][0] == i) CharaAttack[j] += (int)(CharaStatus[j][1] * DeleteCount[i] * 0.5);
+        for(int j=0;j<3;j++){
+            if(CharaStatus[j][0] == 1) {
+                if(NowEnemyType == 2)CharaAttack[j] += (int)(CharaStatus[j][1] * DeleteCount[1] * 0.4);//有利
+                else if(NowEnemyType == 4)CharaAttack[j] += (int)(CharaStatus[j][1] * DeleteCount[1] * 0.2);//不利
+                else CharaAttack[j] += (int)(CharaStatus[j][1] * DeleteCount[1] * 0.3);
             }
-            DeleteCount[i] = 0;
+            if(CharaStatus[j][0] == 2) {
+                if(NowEnemyType == 3)CharaAttack[j] += (int)(CharaStatus[j][1] * DeleteCount[2] * 0.4);//有利
+                else if(NowEnemyType == 1)CharaAttack[j] += (int)(CharaStatus[j][1] * DeleteCount[2] * 0.2);//不利
+                else CharaAttack[j] += (int)(CharaStatus[j][1] * DeleteCount[2] * 0.3);
+            }
+            if(CharaStatus[j][0] == 3) {
+                if(NowEnemyType == 4)CharaAttack[j] += (int)(CharaStatus[j][1] * DeleteCount[3] * 0.4);//有利
+                else if(NowEnemyType == 2)CharaAttack[j] += (int)(CharaStatus[j][1] * DeleteCount[3] * 0.2);//不利
+                else CharaAttack[j] += (int)(CharaStatus[j][1] * DeleteCount[3] * 0.3);
+            }
+            if(CharaStatus[j][0] == 4) {
+                if(NowEnemyType == 1)CharaAttack[j] += (int)(CharaStatus[j][1] * DeleteCount[4] * 0.4);//有利
+                else if(NowEnemyType == 3)CharaAttack[j] += (int)(CharaStatus[j][1] * DeleteCount[4] * 0.2);//不利
+                else CharaAttack[j] += (int)(CharaStatus[j][1] * DeleteCount[4] * 0.3);
+            }
         }
+         for(int i=1;i<5;i++) DeleteCount[i] = 0;
+
         TextView AttackText1 = (TextView) findViewById(R.id.AttackText1);
         TextView AttackText2 = (TextView) findViewById(R.id.AttackText2);
         TextView AttackText3 = (TextView) findViewById(R.id.AttackText3);
@@ -455,24 +475,23 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
         TextView HealText = (TextView) findViewById(R.id.PlayerHealPText);
         HealText.setText("");
         EnemyCurrentHp -= playerAttackPoint;
-        SetEnemyHPBar();
+        SetHPBar("Enemy");
         TextView PlayerATKText = (TextView) findViewById(R.id.PlayerPText);
         PlayerATKText.setText("-" +playerAttackPoint);
 
-        if(CurrentHp < 0) Mode = 8;//GameOver
-        else if (EnemyCurrentHp < 0) {//敵死亡
+
+        //2秒待ち専用モード
+        if (EnemyCurrentHp < 0) {//敵死亡
             ImageView EnemyImg = findViewById(R.id.EnemyImg);
             Drawable drawable = getResources().getDrawable(R.drawable.circle6);
             EnemyImg.setImageDrawable(drawable);
             TestTimer = 0;
             NextMode = 9;
-            Mode = 99;//2秒待ち専用モード
-        }
-        else {
+        } else {
             TestTimer = 0;
             NextMode = 10;
-            Mode = 99;//2秒待ち専用モード
         }
+        Mode = 99;//2秒待ち専用モード
     }
 
     private void EnemyAttackTurn(){
@@ -480,15 +499,18 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
 
         system.out.println(EnemyDefaultHp +" / " + EnemyCurrentHp);
         CurrentHp -= enemyAttackPoint;
-        SetHPBar();
+        SetHPBar("Player");
         TextView HpText = (TextView) findViewById(R.id.HpText);
         HpText.setText(MaxHp + "/" + CurrentHp + " ");
         TextView EnAttackText = (TextView) findViewById(R.id.EnemyATKPText);
         EnAttackText.setText("-" +enemyAttackPoint);
 
-        TestTimer = 0;
-        NextMode = 11;
-        Mode = 99;//2秒待ち専用モード
+        if(CurrentHp < 0) Mode = 8;//GameOver
+        else {
+            TestTimer = 0;
+            NextMode = 11;
+            Mode = 99;//2秒待ち専用モード
+        }
     }
 
     private void GameOver(){
@@ -514,6 +536,7 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
         else {
             CurrentPhase += 1;
             EnemyBox();//次の敵のステータス
+            typeBox(3,NowEnemyType);
         }
         TestTimer = 0;
         Mode = 11;
@@ -524,7 +547,7 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
             TextView EnAttackText = (TextView) findViewById(R.id.EnemyATKPText);
             EnAttackText.setText("");
             ResetPlayerUI();
-            SetEnemyHPBar();
+            SetHPBar("Enemy");
             DragTimer = 6;
             DragTimerBar();
             ImageView dropCover = findViewById(R.id.dropCover);
@@ -576,26 +599,26 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
         }
     }
 
-    private void SetHPBar(){
-        ImageView Imgw = findViewById(R.id.HpBar);
+    private void SetHPBar(String name){
+        ImageView Imgw;
+        Drawable drawable;
+        if(name == "Player") Imgw = findViewById(R.id.HpBar);
+        else Imgw = findViewById(R.id.EnemyHpBar);
+
         Drawable original = this.getResources().getDrawable(R.drawable.hp_bar);
         Bitmap bitmap = ((BitmapDrawable) original).getBitmap();
-        HpBarSize = 205 * CurrentHp / MaxHp; //DefaultSize : MaxHp = NewSize : CurrentHpから求める
-        if(HpBarSize > 205) HpBarSize = 205;
-        if(HpBarSize < 5) HpBarSize = 5;
-        Drawable drawableA = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, HpBarSize, 6, true));
-        Imgw.setImageDrawable(drawableA);
-    }
-
-    private void SetEnemyHPBar(){
-        ImageView Imgw2 = findViewById(R.id.EnemyHpBar);
-        Drawable original2 = this.getResources().getDrawable(R.drawable.hp_bar);
-        Bitmap bitmap2 = ((BitmapDrawable) original2).getBitmap();
-        EnemyHpBarSize = 225 * EnemyCurrentHp / EnemyDefaultHp; //DefaultSize : MaxHp = NewSize : CurrentHpから求める
-        if(EnemyHpBarSize > 225) EnemyHpBarSize = 225;
-        if(EnemyHpBarSize < 5) EnemyHpBarSize = 5;
-        Drawable drawableA = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap2, EnemyHpBarSize, 6, true));
-        Imgw2.setImageDrawable(drawableA);
+        if(name == "Player"){
+            HpBarSize = 205 * CurrentHp / MaxHp; //DefaultSize : MaxHp = NewSize : CurrentHpから求める
+            if(HpBarSize > 205) HpBarSize = 205;
+            if(HpBarSize < 5) HpBarSize = 5;
+            drawable = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, HpBarSize, 6, true));
+        }else{
+            EnemyHpBarSize = 225 * EnemyCurrentHp / EnemyDefaultHp; //DefaultSize : MaxHp = NewSize : CurrentHpから求める
+            if(EnemyHpBarSize > 225) EnemyHpBarSize = 225;
+            if(EnemyHpBarSize < 5) EnemyHpBarSize = 5;
+            drawable = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, EnemyHpBarSize, 6, true));
+        }
+        Imgw.setImageDrawable(drawable);
     }
 
     private void DragTimerBar(){
@@ -614,12 +637,14 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
         ImageView EnemyImg = findViewById(R.id.EnemyImg);
         if(Stage == 1){
             if(CurrentPhase == 1){
+                NowEnemyType = EnemyStatus[0][0];
                 EnemyDefaultHp = EnemyStatus[0][1];
                 enemyAttackPoint = EnemyStatus[0][2];
                 Drawable drawable = getResources().getDrawable(R.drawable.enemy3);
                 EnemyImg.setImageDrawable(drawable);
             }
             if(CurrentPhase == 2){
+                NowEnemyType = EnemyStatus[1][0];
                 EnemyDefaultHp = EnemyStatus[1][1];
                 enemyAttackPoint = EnemyStatus[1][2];
                 Drawable drawable = getResources().getDrawable(R.drawable.enemy1);
@@ -628,12 +653,14 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
         }
         if(Stage == 2){
             if(CurrentPhase == 1){
+                NowEnemyType = EnemyStatus[2][0];
                 EnemyDefaultHp = EnemyStatus[2][1];
                 enemyAttackPoint = EnemyStatus[2][2];
                 Drawable drawable = getResources().getDrawable(R.drawable.sr2);
                 EnemyImg.setImageDrawable(drawable);
             }
             if(CurrentPhase == 2){
+                NowEnemyType = EnemyStatus[3][0];
                 EnemyDefaultHp = EnemyStatus[3][1];
                 enemyAttackPoint = EnemyStatus[3][2];
                 Drawable drawable = getResources().getDrawable(R.drawable.enemy2);
@@ -641,5 +668,30 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
             }
         }
         EnemyCurrentHp = EnemyDefaultHp;
+    }
+
+    private void typeBox(int i,int Num){
+
+        if(i==0) {
+            ImageView TypeImg1 = findViewById(R.id.type1);
+            Drawable typeDrawable1 = getResources().getDrawable(DropDesign[Num]);
+            TypeImg1.setImageDrawable(typeDrawable1);
+        }
+        if(i==1){
+            ImageView TypeImg2 = findViewById(R.id.type2);
+            Drawable typeDrawable2 = getResources().getDrawable(DropDesign[Num]);
+            TypeImg2.setImageDrawable(typeDrawable2);
+        }
+        if(i==2){
+            ImageView TypeImg3 = findViewById(R.id.type3);
+            Drawable typeDrawable3 = getResources().getDrawable(DropDesign[Num]);
+            TypeImg3.setImageDrawable(typeDrawable3);
+        }
+        if(i==3) {
+            ImageView TypeImg4 = findViewById(R.id.EnemyType);
+            Drawable typeDrawable4 = getResources().getDrawable(DropDesign[Num]);
+            TypeImg4.setImageDrawable(typeDrawable4);
+        }
+
     }
 }

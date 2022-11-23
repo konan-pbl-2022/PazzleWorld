@@ -13,6 +13,9 @@ import java.lang.reflect.Member;
 public class StageSelectScene extends AppCompatActivity {
 
     @Override
+    public void onBackPressed() {} //戻るボタンの無効化
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stage_select_scene);

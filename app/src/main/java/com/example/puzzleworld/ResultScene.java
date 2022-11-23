@@ -12,6 +12,9 @@ import android.widget.TextView;
 public class ResultScene extends AppCompatActivity {
 
     @Override
+    public void onBackPressed() {} //戻るボタンの無効化
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result_scene);

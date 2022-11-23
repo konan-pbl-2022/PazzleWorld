@@ -540,6 +540,14 @@
         android:layout_marginTop="480px"
         android:src="@drawable/circle" />
 
+    <ImageView
+        android:id="@+id/EnemyType"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="255px"
+        android:layout_marginTop="80px"
+        android:src="@drawable/circle" />
+
 
     <TextView
         android:id="@+id/AttackText3"

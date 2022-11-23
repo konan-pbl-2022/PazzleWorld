@@ -72,7 +72,7 @@ public class GachaScene extends AppCompatActivity {
                 ok.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
+                        /*表示の初期値*/
                         check.setVisibility(View.INVISIBLE);
                         ok.setVisibility(View.INVISIBLE);
                         cancel.setVisibility(View.INVISIBLE);

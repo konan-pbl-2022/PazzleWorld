@@ -82,10 +82,10 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
     int EnemyHpBarSize = 225;
     int DragTimerSize = 550;
 //岩水火草
-    int EnemyStatus[][] = {/*s1*/{1,36,4},{1,70,6},
-                           /*s2*/{2,64,8},{3,115,13},
-                           /*s3*/{4,100,12},{2,175,19},
-                           /*s4*/{3,145,23},{1,185,26},{2,236,32}};
+    int EnemyStatus[][] = {/*s1*/{1,94,7},{1,159,11},
+                           /*s2*/{2,184,13},{3,249,17},
+                           /*s3*/{4,360,21},{2,515,29},
+                           /*s4*/{3,635,32},{1,726,37},{2,873,46}};
     /////外部から変数を受け取るエリア
     int Stage = 1;
     int CharaStatus[][] = new int[3][4];//0属性,1攻撃,2体力,3回復
@@ -144,7 +144,6 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
 
         ResetPlayerUI();
 
-
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
@@ -173,7 +172,7 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
                                 //時間を管理するときに使えばイイ！
                                 if(realtime != getNowDate()){
                                     DragTimer -= 0.1;
-                                    if(TestTimer > 0.5) DragTimerBar();
+                                    if(TestTimer > 0.7) DragTimerBar();
                                     realtime = getNowDate();
                                 }
                             }
@@ -218,7 +217,7 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
         MaxHp = CharaStatus[0][2] + CharaStatus[1][2] + CharaStatus[2][2];
         CurrentHp = MaxHp;
         TextView HpText = (TextView) findViewById(R.id.HpText);
-        HpText.setText(MaxHp + "/" + CurrentHp + " ");
+        HpText.setText(CurrentHp + "/" + MaxHp + " ");
 
         for(int i=0;i<vertical_num;i++) {
             for(int j=0;j<horizontal_num;j++) {
@@ -384,8 +383,11 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
     }
 
     public void DamageCalc(){
+        float Hipoint = 0.25f;
+        float point = 0.20f;
+        float Lowpoint = 0.15f;
         //岩水火草
-        playerHealPoint = DeleteCount[0] * (int)((CharaStatus[0][1] + CharaStatus[1][1] + CharaStatus[2][1])*0.2);
+        playerHealPoint = DeleteCount[0] * (int)((CharaStatus[0][1] + CharaStatus[1][1] + CharaStatus[2][1])*0.02);
         DeleteCount[0] = 0;
         if(MaxHp < CurrentHp + playerHealPoint) CurrentHp = MaxHp;
         else CurrentHp += playerHealPoint;
@@ -395,24 +397,24 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
 
         for(int j=0;j<3;j++){
             if(CharaStatus[j][0] == 1) {
-                if(NowEnemyType == 2)CharaAttack[j] += (int)(CharaStatus[j][1] * DeleteCount[1] * 0.4);//有利
-                else if(NowEnemyType == 4)CharaAttack[j] += (int)(CharaStatus[j][1] * DeleteCount[1] * 0.2);//不利
-                else CharaAttack[j] += (int)(CharaStatus[j][1] * DeleteCount[1] * 0.3);
+                if(NowEnemyType == 2)CharaAttack[j] += (int)(CharaStatus[j][1] * DeleteCount[1] * Hipoint);//有利
+                else if(NowEnemyType == 4)CharaAttack[j] += (int)(CharaStatus[j][1] * DeleteCount[1] * Lowpoint);//不利
+                else CharaAttack[j] += (int)(CharaStatus[j][1] * DeleteCount[1] * point);
             }
             if(CharaStatus[j][0] == 2) {
-                if(NowEnemyType == 3)CharaAttack[j] += (int)(CharaStatus[j][1] * DeleteCount[2] * 0.4);//有利
-                else if(NowEnemyType == 1)CharaAttack[j] += (int)(CharaStatus[j][1] * DeleteCount[2] * 0.2);//不利
-                else CharaAttack[j] += (int)(CharaStatus[j][1] * DeleteCount[2] * 0.3);
+                if(NowEnemyType == 3)CharaAttack[j] += (int)(CharaStatus[j][1] * DeleteCount[2] * Hipoint);//有利
+                else if(NowEnemyType == 1)CharaAttack[j] += (int)(CharaStatus[j][1] * DeleteCount[2] * Lowpoint);//不利
+                else CharaAttack[j] += (int)(CharaStatus[j][1] * DeleteCount[2] * point);
             }
             if(CharaStatus[j][0] == 3) {
-                if(NowEnemyType == 4)CharaAttack[j] += (int)(CharaStatus[j][1] * DeleteCount[3] * 0.4);//有利
-                else if(NowEnemyType == 2)CharaAttack[j] += (int)(CharaStatus[j][1] * DeleteCount[3] * 0.2);//不利
-                else CharaAttack[j] += (int)(CharaStatus[j][1] * DeleteCount[3] * 0.3);
+                if(NowEnemyType == 4)CharaAttack[j] += (int)(CharaStatus[j][1] * DeleteCount[3] * Hipoint);//有利
+                else if(NowEnemyType == 2)CharaAttack[j] += (int)(CharaStatus[j][1] * DeleteCount[3] * Lowpoint);//不利
+                else CharaAttack[j] += (int)(CharaStatus[j][1] * DeleteCount[3] * point);
             }
             if(CharaStatus[j][0] == 4) {
-                if(NowEnemyType == 1)CharaAttack[j] += (int)(CharaStatus[j][1] * DeleteCount[4] * 0.4);//有利
-                else if(NowEnemyType == 3)CharaAttack[j] += (int)(CharaStatus[j][1] * DeleteCount[4] * 0.2);//不利
-                else CharaAttack[j] += (int)(CharaStatus[j][1] * DeleteCount[4] * 0.3);
+                if(NowEnemyType == 1)CharaAttack[j] += (int)(CharaStatus[j][1] * DeleteCount[4] * Hipoint);//有利
+                else if(NowEnemyType == 3)CharaAttack[j] += (int)(CharaStatus[j][1] * DeleteCount[4] * Lowpoint);//不利
+                else CharaAttack[j] += (int)(CharaStatus[j][1] * DeleteCount[4] * point);
             }
         }
          for(int i=1;i<5;i++) DeleteCount[i] = 0;
@@ -427,7 +429,7 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
         playerAttackPoint = CharaAttack[0] + CharaAttack[1] + CharaAttack[2];
 
         TextView HpText = (TextView) findViewById(R.id.HpText);
-        HpText.setText(MaxHp + "/" + CurrentHp + " ");
+        HpText.setText(CurrentHp+ "/" + MaxHp  + " ");
 
         for (int i = 0; i < vertical_num; i++) {
             for (int j = 0; j < horizontal_num; j++) {
@@ -518,7 +520,7 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
         CurrentHp -= enemyAttackPoint;
         SetHPBar("Player");
         TextView HpText = (TextView) findViewById(R.id.HpText);
-        HpText.setText(MaxHp + "/" + CurrentHp + " ");
+        HpText.setText(CurrentHp + "/" + MaxHp  + " ");
         TextView EnAttackText = (TextView) findViewById(R.id.EnemyATKPText);
         EnAttackText.setText("" +enemyAttackPoint);
 

@@ -12,6 +12,7 @@ public class Character extends AppCompatActivity {
     int attack;
     int hp;
     int recovery;
+    int Maxlevel;
     int level;
     //  所持数
     int number;
@@ -20,16 +21,19 @@ public class Character extends AppCompatActivity {
     //　画像
     Drawable image;
     int EXP;
+    int ReqEXP;
 
     //　コンストラクタ
-    public void setStatus(int atb, int a, int h, int r, int l, int n, int exp,boolean b) {
+    public void setStatus(int atb, int a, int h, int r, int maxl, int l, int n, int exp,int reqexp,boolean b) {
         attribute = atb;
         attack = a;
         hp = h;
         recovery = r;
+        Maxlevel = maxl;
         level = l;
         number = n;
         EXP = exp;
+        ReqEXP = reqexp;
         possession = b;
 
     }
@@ -57,6 +61,9 @@ public class Character extends AppCompatActivity {
     int getRecovery() {
         return recovery;
     }
+    int getMaxLevel() {
+        return Maxlevel;
+    }
     int getLevel() {
         return level;
     }
@@ -70,6 +77,7 @@ public class Character extends AppCompatActivity {
         return image;
     }
     int getEXP(){return EXP;}
+    int getReqEXP(){return ReqEXP;}
 
     //　add
     int addAttack(int n) {
@@ -88,6 +96,7 @@ public class Character extends AppCompatActivity {
         return number + n;
     }
     int addEXP(int n){return EXP + n;}
+    int addReqEXP(int n){return ReqEXP + n;}
 }
 
 

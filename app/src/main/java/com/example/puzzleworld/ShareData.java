@@ -22,22 +22,22 @@ public class ShareData extends Application {
             mainChara[i] = new Character();
         }
 
-        chara[0].setStatus(1,3,6,1,1,0,0,true);
-        chara[1].setStatus(2,3,6,1,1,0,0,true);
-        chara[2].setStatus(3,3,6,1, 1,0,0,true);
-        chara[3].setStatus(4,3,6,1, 1,0,0,true);
-        chara[4].setStatus(1,5,9,2, 1,0,0,true);
-        chara[5].setStatus(2,5,9,2, 1,0,0,true);
-        chara[6].setStatus(3,5,9,2, 1,0,0,true);
-        chara[7].setStatus(4,5,9,2, 1,0,0,true);
-        chara[8].setStatus(1,7,12,3, 1,0,0,true);
-        chara[9].setStatus(2,7,12,3, 1,0,0,true);
-        chara[10].setStatus(3,7,12,3, 1,0,0,true);
-        chara[11].setStatus(4,7,12,3, 1,0,0,true);
-        chara[12].setStatus(1,9,15,4, 1,0,0,true);
-        chara[13].setStatus(2,9,15,4, 1,0,0,true);
-        chara[14].setStatus(3,9,15,4, 1,0,0,true);
-        chara[15].setStatus(4,9,15,4, 1,0,0,true);
+        chara[0].setStatus(1,20,12,20,10,1,0,0,10,true);
+        chara[1].setStatus(2,20,12,20,10,1,0,0,10,true);
+        chara[2].setStatus(3,20,12,20, 10,1,0,0,10,true);
+        chara[3].setStatus(4,20,12,20, 10,1,0,0,10,true);
+        chara[4].setStatus(1,40,18,40, 10,1,0,0,20,true);
+        chara[5].setStatus(2,40,18,40, 10,1,0,0,20,true);
+        chara[6].setStatus(3,40,18,40, 10,1,0,0,20,true);
+        chara[7].setStatus(4,40,18,40, 10,1,0,0,20,true);
+        chara[8].setStatus(1,70,24,60, 10,1,0,0,30,true);
+        chara[9].setStatus(2,70,24,60, 10,1,0,0,30,true);
+        chara[10].setStatus(3,70,24,60, 10,1,0,0,30,true);
+        chara[11].setStatus(4,70,24,60, 10,1,0,0,30,true);
+        chara[12].setStatus(1,90,30,80, 10,1,0,0,40,true);
+        chara[13].setStatus(2,90,30,80, 10,1,0,0,40,true);
+        chara[14].setStatus(3,90,30,80, 10,1,0,0,40,true);
+        chara[15].setStatus(4,90,30,80, 10,1,0,0,40,true);
 
 
 

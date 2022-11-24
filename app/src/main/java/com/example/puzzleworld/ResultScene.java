@@ -23,15 +23,22 @@ public class ResultScene extends AppCompatActivity {
         if(PlayerStatus.GameClear == true) {
             resultText.setText("Stage Clear");
 
+            TextView scoreLabel = findViewById(R.id.scoreLabel);
+            TextView scoreLabel2 = findViewById(R.id.scoreLabel2);
             if(PlayerStatus.CanPlayStage == PlayerStatus.SelectStage) {
-                TextView scoreLabel = findViewById(R.id.scoreLabel);
+
                 scoreLabel.setText("初クリアボーナス  5 魔晶石");
+                scoreLabel2.setText("クリアボーナス  1 魔晶石");
                 PlayerStatus.GachaStone += 5;
                 PlayerStatus.CanPlayStage += 1;
+
+                PlayerStatus.GachaStone += 1;
+            }else{
+                scoreLabel.setText("");
+                scoreLabel2.setText("クリアボーナス  1 魔晶石");
+                PlayerStatus.GachaStone += 1;
             }
-            TextView scoreLabel2 = findViewById(R.id.scoreLabel2);
-            scoreLabel2.setText("クリアボーナス  1 魔晶石");
-            PlayerStatus.GachaStone += 1;
+
         }
         if(PlayerStatus.GameClear == false) {
             TextView scoreLabel = findViewById(R.id.scoreLabel);

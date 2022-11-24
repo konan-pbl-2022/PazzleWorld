@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -17,7 +16,11 @@ import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 import java.util.Timer;
@@ -30,6 +33,7 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
     private Handler handler = new Handler();
 
     private Timer timer = new Timer();
+    private Timer timer2 = new Timer();
 
     private GridLayout gridLayout;
     private View mDragView;
@@ -51,10 +55,11 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
     //ドラッグ＆ドロップ後のステータスの入れ替えが難しかったため、Mapを採用
     Map<Integer,Integer> map = new HashMap<>();
 
-    int EnemyDesign[] = {R.drawable.enemy1,R.drawable.enemy2,R.drawable.enemy3};
+    int EnemyDesign[] = {R.drawable.enemy1,R.drawable.enemy2,R.drawable.enemy3,R.drawable.enemy4,
+                        R.drawable.enemy5,R.drawable.enemy6};
 
     int DropDesign[] = {R.drawable.circle,R.drawable.circle5,R.drawable.circle2,
-            R.drawable.circle4,R.drawable.circle3,R.drawable.circle6};
+                        R.drawable.circle4,R.drawable.circle3,R.drawable.circle6};
     int DeleteCount[] = {0,0,0,0,0};
     int DeleteSum = 0;
 
@@ -65,8 +70,9 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
     float BlackWindowAlpha = 1;
     private int leftId;
     private boolean firstchecked = false;
-    float TestTimer = 0;
+    static float TestTimer = 0;
     float CircleSize = 0.02f;
+    static float realtime;
 
     boolean dragNow = false;
     float DragTimer = 0;
@@ -75,14 +81,16 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
     int HpBarSize = 205;
     int EnemyHpBarSize = 225;
     int DragTimerSize = 550;
-
-    int EnemyStatus[][] = {/*s1*/{1,36,5},{1,70,8}, /*s2*/{2,64,7},{3,115,13}};
-    //1,水 2,草 3,火 4,岩
+//岩水火草
+    int EnemyStatus[][] = {/*s1*/{1,36,4},{1,70,6},
+                           /*s2*/{2,64,8},{3,115,13},
+                           /*s3*/{4,100,12},{2,175,19},
+                           /*s4*/{3,145,23},{1,185,26},{2,236,32}};
     /////外部から変数を受け取るエリア
     int Stage = 1;
     int CharaStatus[][] = new int[3][4];//0属性,1攻撃,2体力,3回復
     ///////////////////////
-    int MaxPhase[] = {0,2,2,3};
+    int MaxPhase[] = {0,2,2,2,3};
     int CurrentPhase = 1;
 
     int MaxHp,CurrentHp;
@@ -113,6 +121,7 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
         Button StageSelectButton = (Button) findViewById(R.id.stselebutton);
         StageSelectButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                timer.cancel();
                 Intent intent = new Intent(GameScene.this, StageSelectScene.class);
                 startActivity(intent);
             }
@@ -133,18 +142,8 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
         Drawable drawable3 = d.mainChara[2].getImage();
         CharaImg3.setImageDrawable(drawable3);
 
-        TextView HealText = (TextView) findViewById(R.id.PlayerHealPText);
-        HealText.setText("");
-        TextView PlayerATKText = (TextView) findViewById(R.id.PlayerPText);
-        PlayerATKText.setText("");
-        TextView EnAttackText = (TextView) findViewById(R.id.EnemyATKPText);
-        EnAttackText.setText("");
-        TextView ATKText1 = (TextView) findViewById(R.id.AttackText1);
-        ATKText1.setText("");
-        TextView ATKText2 = (TextView) findViewById(R.id.AttackText2);
-        ATKText2.setText("");
-        TextView ATKText3 = (TextView) findViewById(R.id.AttackText3);
-        ATKText3.setText("");
+        ResetPlayerUI();
+
 
         timer.schedule(new TimerTask() {
             @Override
@@ -153,6 +152,7 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
                     @Override
                     public void run() {
 
+                        handler.removeCallbacks(this);
                         //黒画面透明度
                         if(Mode == 8) {
                             BlackWindow.setAlpha(BlackWindowAlpha);
@@ -163,7 +163,6 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
                             else BlackWindowAlpha -= 0.005;
                         }
 
-                        //時間を管理するときに使えばイイ！
                         TestTimer += 0.1;
 
                         if (Mode == 0) FirstSetting(); //初期設定
@@ -171,8 +170,12 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
                         if(Mode == 1) {
                             for(int i=0;i<3;i++) CharaAttack[i] = 0;
                             if(dragNow){
-                                DragTimer -= 0.008;
-                                if(TestTimer>0.7) DragTimerBar();
+                                //時間を管理するときに使えばイイ！
+                                if(realtime != getNowDate()){
+                                    DragTimer -= 0.1;
+                                    if(TestTimer > 0.5) DragTimerBar();
+                                    realtime = getNowDate();
+                                }
                             }
                         }
                         if(Mode == 2) CheckAndCount();
@@ -191,6 +194,14 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
                 });
             }
         }, 0, 7);
+    }
+
+    public float getNowDate(){
+        SimpleDateFormat df = new SimpleDateFormat("ss.S", Locale.JAPAN);
+        String time = df.format(System.currentTimeMillis());
+        float num = Float.parseFloat(time);
+        system.out.println(num);
+        return num;
     }
 
     @Override
@@ -264,6 +275,7 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
                         dragNow = false;
                         Mode = 2;
                     }else{
+                        if(!dragNow)realtime = getNowDate();
                         dragNow = true;
                         swap(v, mDragView);
                         break;
@@ -351,7 +363,6 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
             system.out.println(del + ":" + DeleteCount[del]);
         }
 
-        CheckTester(0);
         TestTimer = 0;
         Mode = 3;
     }
@@ -471,17 +482,19 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
     private void PlayerAttackTurn(){
         ImageView dropCover = findViewById(R.id.dropCover);
         dropCover.setVisibility(View.VISIBLE);
+        ImageView DamageEffect2 = findViewById(R.id.DamageEffect2);
+        DamageEffect2.setVisibility(View.VISIBLE);
 
         TextView HealText = (TextView) findViewById(R.id.PlayerHealPText);
         HealText.setText("");
         EnemyCurrentHp -= playerAttackPoint;
         SetHPBar("Enemy");
         TextView PlayerATKText = (TextView) findViewById(R.id.PlayerPText);
-        PlayerATKText.setText("-" +playerAttackPoint);
+        PlayerATKText.setText("" + playerAttackPoint);
 
 
         //2秒待ち専用モード
-        if (EnemyCurrentHp < 0) {//敵死亡
+        if (EnemyCurrentHp <= 0) {//敵死亡
             ImageView EnemyImg = findViewById(R.id.EnemyImg);
             Drawable drawable = getResources().getDrawable(R.drawable.circle6);
             EnemyImg.setImageDrawable(drawable);
@@ -496,6 +509,10 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
 
     private void EnemyAttackTurn(){
         ResetPlayerUI();
+        ImageView DamageEffect1 = findViewById(R.id.DamageEffect1);
+        ImageView DamageEffect2 = findViewById(R.id.DamageEffect2);
+        DamageEffect1.setVisibility(View.VISIBLE);
+        DamageEffect2.setVisibility(View.INVISIBLE);
 
         system.out.println(EnemyDefaultHp +" / " + EnemyCurrentHp);
         CurrentHp -= enemyAttackPoint;
@@ -503,9 +520,9 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
         TextView HpText = (TextView) findViewById(R.id.HpText);
         HpText.setText(MaxHp + "/" + CurrentHp + " ");
         TextView EnAttackText = (TextView) findViewById(R.id.EnemyATKPText);
-        EnAttackText.setText("-" +enemyAttackPoint);
+        EnAttackText.setText("" +enemyAttackPoint);
 
-        if(CurrentHp < 0) Mode = 8;//GameOver
+        if(CurrentHp <= 0) Mode = 8;//GameOver
         else {
             TestTimer = 0;
             NextMode = 11;
@@ -517,6 +534,7 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
         PlayerStatus.GameClear = false;
         PlayerStatus.LastPhase = CurrentPhase-1;
         if(BlackWindowAlpha > 0.99){
+            timer.cancel();
             Intent intent = new Intent(GameScene.this, ResultScene.class);
             startActivity(intent);
             Mode = -1;
@@ -525,10 +543,13 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
 
     private void NextEnemySpawn(){
         ResetPlayerUI();
+        ImageView DamageEffect2 = findViewById(R.id.DamageEffect2);
+        DamageEffect2.setVisibility(View.INVISIBLE);
         TextView EnAttackText = (TextView) findViewById(R.id.EnemyATKPText);
         EnAttackText.setText("");
         PlayerStatus.LastPhase = CurrentPhase;
         if(MaxPhase[Stage] == CurrentPhase) {
+            timer.cancel();
             PlayerStatus.GameClear = true;
             Intent intent = new Intent(GameScene.this, ResultScene.class);
             startActivity(intent);
@@ -552,6 +573,8 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
             DragTimerBar();
             ImageView dropCover = findViewById(R.id.dropCover);
             dropCover.setVisibility(View.INVISIBLE);
+            ImageView DamageEffect1 = findViewById(R.id.DamageEffect1);
+            DamageEffect1.setVisibility(View.INVISIBLE);
             Mode = 1;
         }
     }
@@ -571,6 +594,10 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
     private void ResetPlayerUI(){
         playerHealPoint = 0;
         playerAttackPoint = 0;
+        ImageView DamageEffect1 = findViewById(R.id.DamageEffect1);
+        DamageEffect1.setVisibility(View.INVISIBLE);
+        ImageView DamageEffect2 = findViewById(R.id.DamageEffect2);
+        DamageEffect2.setVisibility(View.INVISIBLE);
         TextView ATKText1 = (TextView) findViewById(R.id.AttackText1);
         ATKText1.setText("");
         TextView ATKText2 = (TextView) findViewById(R.id.AttackText2);
@@ -581,9 +608,11 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
         HealText.setText("");
         TextView PlayerATKText = (TextView) findViewById(R.id.PlayerPText);
         PlayerATKText.setText("");
+        TextView EnAttackText = (TextView) findViewById(R.id.EnemyATKPText);
+        EnAttackText.setText("");
     }
 
-    //引数0でObjStatus,1でImageViewのId,2でmapChecker
+    /*
     private void CheckTester(int num){
         for(int i=0;i<vertical_num;i++) {
             system.out.print(i + " : ");
@@ -597,7 +626,7 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
             }
             system.out.print("\n");
         }
-    }
+    }*/
 
     private void SetHPBar(String name){
         ImageView Imgw;
@@ -635,38 +664,56 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
 
     private void EnemyBox(){
         ImageView EnemyImg = findViewById(R.id.EnemyImg);
+        Drawable drawable = null;
+        int EnemyNum=0;
         if(Stage == 1){
             if(CurrentPhase == 1){
-                NowEnemyType = EnemyStatus[0][0];
-                EnemyDefaultHp = EnemyStatus[0][1];
-                enemyAttackPoint = EnemyStatus[0][2];
-                Drawable drawable = getResources().getDrawable(R.drawable.enemy3);
-                EnemyImg.setImageDrawable(drawable);
+                EnemyNum = 0;
+                drawable = getResources().getDrawable(R.drawable.enemy3);
             }
             if(CurrentPhase == 2){
-                NowEnemyType = EnemyStatus[1][0];
-                EnemyDefaultHp = EnemyStatus[1][1];
-                enemyAttackPoint = EnemyStatus[1][2];
-                Drawable drawable = getResources().getDrawable(R.drawable.enemy1);
-                EnemyImg.setImageDrawable(drawable);
+                EnemyNum = 1;
+                drawable = getResources().getDrawable(R.drawable.enemy1);
             }
         }
         if(Stage == 2){
             if(CurrentPhase == 1){
-                NowEnemyType = EnemyStatus[2][0];
-                EnemyDefaultHp = EnemyStatus[2][1];
-                enemyAttackPoint = EnemyStatus[2][2];
-                Drawable drawable = getResources().getDrawable(R.drawable.sr2);
-                EnemyImg.setImageDrawable(drawable);
+                EnemyNum = 2;
+                drawable = getResources().getDrawable(R.drawable.enemy6);
             }
             if(CurrentPhase == 2){
-                NowEnemyType = EnemyStatus[3][0];
-                EnemyDefaultHp = EnemyStatus[3][1];
-                enemyAttackPoint = EnemyStatus[3][2];
-                Drawable drawable = getResources().getDrawable(R.drawable.enemy2);
-                EnemyImg.setImageDrawable(drawable);
+                EnemyNum = 3;
+                drawable = getResources().getDrawable(R.drawable.enemy2);
             }
         }
+        if(Stage == 3){
+            if(CurrentPhase == 1){
+                EnemyNum = 4;
+                drawable = getResources().getDrawable(R.drawable.enemy5);
+            }
+            if(CurrentPhase == 2){
+                EnemyNum = 5;
+                drawable = getResources().getDrawable(R.drawable.enemy4);
+            }
+        }
+        if(Stage == 4){
+            if(CurrentPhase == 1){
+                EnemyNum = 6;
+                drawable = getResources().getDrawable(R.drawable.enemy2);
+            }
+            if(CurrentPhase == 2){
+                EnemyNum = 7;
+                drawable = getResources().getDrawable(R.drawable.enemy1);
+            }
+            if(CurrentPhase == 3){
+                EnemyNum = 8;
+                drawable = getResources().getDrawable(R.drawable.enemy4);
+            }
+        }
+        EnemyImg.setImageDrawable(drawable);
+        NowEnemyType = EnemyStatus[EnemyNum][0];
+        EnemyDefaultHp = EnemyStatus[EnemyNum][1];
+        enemyAttackPoint = EnemyStatus[EnemyNum][2];
         EnemyCurrentHp = EnemyDefaultHp;
     }
 

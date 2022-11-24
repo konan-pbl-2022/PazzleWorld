@@ -16,11 +16,6 @@
         android:layout_marginTop="0px"
         android:background="#A0A0A0">
 
-        <ImageView
-            android:id="@+id/BlackWindow"
-            android:layout_width="800dp"
-            android:layout_height="800dp"
-            android:layout_marginTop="0px" />
     </FrameLayout>
 
 
@@ -559,16 +554,24 @@
         android:textSize="25sp"
         android:textStyle="bold" />
 
+    <ImageView
+        android:id="@+id/DamageEffect1"
+        android:layout_width="300dp"
+        android:layout_height="150dp"
+        android:layout_marginLeft="150px"
+        android:layout_marginTop="500px"
+        android:src="@drawable/damage" />
+
     <TextView
         android:id="@+id/EnemyATKPText"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="450px"
-        android:layout_marginTop="600px"
-        android:text="-0"
+        android:layout_marginTop="620px"
+        android:text="0000"
         android:textColor="#E9000D"
-        android:textSize="50sp"
-        android:textStyle="bold" />
+        android:textSize="45sp"
+        android:textStyle="bold"
+        android:gravity="center_horizontal"/>
 
     <TextView
         android:id="@+id/PlayerHealPText"
@@ -596,24 +599,31 @@
         android:layout_marginTop="30px"
         android:src="@drawable/type" />
 
+    <ImageView
+        android:id="@+id/DamageEffect2"
+        android:layout_width="400dp"
+        android:layout_height="200dp"
+        android:layout_marginLeft="20px"
+        android:layout_marginTop="50px"
+        android:src="@drawable/damage" />
+
     <TextView
         android:id="@+id/PlayerPText"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="450px"
         android:layout_marginTop="230px"
-        android:text="-000"
+        android:text="00000"
         android:textColor="#000000"
         android:textSize="50sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:gravity="center_horizontal"/>
+
 
     <ImageView
         android:id="@+id/BlackWindow"
         android:layout_width="800dp"
         android:layout_height="800dp"
-        android:layout_marginTop="0px"/>
-    <!--android:src="@drawable/black_window"/>-->
-
-
+        android:layout_marginTop="0px"
+        android:src="@drawable/black_window"/>
 
 </FrameLayout>

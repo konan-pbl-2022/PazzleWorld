@@ -74,7 +74,22 @@ public class StageSelectScene extends AppCompatActivity {
             }
         });
 
-
+        //ステージ3ボタン
+        Button nextButton5 = (Button)findViewById(R.id.button7);
+        //表示
+        if(PlayerStatus.CanPlayStage >= 3){
+            nextButton5.setVisibility(View.VISIBLE);
+        }else{
+            nextButton5.setVisibility(View.INVISIBLE);
+        }
+        //画面切り替え
+        nextButton5.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                PlayerStatus.SelectStage = 3;
+                Intent intent = new Intent(StageSelectScene.this, GameScene.class);
+                startActivity(intent);
+            }
+        });
 
     }
 }

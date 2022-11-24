@@ -19,16 +19,19 @@ public class Character extends AppCompatActivity {
     boolean possession;
     //　画像
     Drawable image;
+    int EXP;
 
     //　コンストラクタ
-    public void setStatus(int atb, int a, int h, int r, int l, int n, boolean b) {
+    public void setStatus(int atb, int a, int h, int r, int l, int n, int exp,boolean b) {
         attribute = atb;
         attack = a;
         hp = h;
         recovery = r;
         level = l;
         number = n;
+        EXP = exp;
         possession = b;
+
     }
     // セッター
     void setPossession(boolean b) {
@@ -66,6 +69,7 @@ public class Character extends AppCompatActivity {
     Drawable getImage() {
         return image;
     }
+    int getEXP(){return EXP;}
 
     //　add
     int addAttack(int n) {
@@ -83,6 +87,7 @@ public class Character extends AppCompatActivity {
     int addNumber(int n) {
         return number + n;
     }
+    int addEXP(int n){return EXP + n;}
 }
 
 

@@ -26,18 +26,18 @@ public class ShareData extends Application {
         chara[1].setStatus(2,20,12,20,10,1,0,0,10,true);
         chara[2].setStatus(3,20,12,20, 10,1,0,0,10,true);
         chara[3].setStatus(4,20,12,20, 10,1,0,0,10,true);
-        chara[4].setStatus(1,40,18,40, 10,1,0,0,20,true);
-        chara[5].setStatus(2,40,18,40, 10,1,0,0,20,true);
-        chara[6].setStatus(3,40,18,40, 10,1,0,0,20,true);
-        chara[7].setStatus(4,40,18,40, 10,1,0,0,20,true);
-        chara[8].setStatus(1,70,24,60, 10,1,0,0,30,true);
-        chara[9].setStatus(2,70,24,60, 10,1,0,0,30,true);
-        chara[10].setStatus(3,70,24,60, 10,1,0,0,30,true);
-        chara[11].setStatus(4,70,24,60, 10,1,0,0,30,true);
-        chara[12].setStatus(1,90,30,80, 10,1,0,0,40,true);
-        chara[13].setStatus(2,90,30,80, 10,1,0,0,40,true);
-        chara[14].setStatus(3,90,30,80, 10,1,0,0,40,true);
-        chara[15].setStatus(4,90,30,80, 10,1,0,0,40,true);
+        chara[4].setStatus(1,40,18,40, 10,1,0,0,20,false);
+        chara[5].setStatus(2,40,18,40, 10,1,0,0,20,false);
+        chara[6].setStatus(3,40,18,40, 10,1,0,0,20,false);
+        chara[7].setStatus(4,40,18,40, 10,1,0,0,20,false);
+        chara[8].setStatus(1,70,24,60, 10,1,0,0,30,false);
+        chara[9].setStatus(2,70,24,60, 10,1,0,0,30,false);
+        chara[10].setStatus(3,70,24,60, 10,1,0,0,30,false);
+        chara[11].setStatus(4,70,24,60, 10,1,0,0,30,false);
+        chara[12].setStatus(1,90,30,80, 10,1,0,0,40,false);
+        chara[13].setStatus(2,90,30,80, 10,1,0,0,40,false);
+        chara[14].setStatus(3,90,30,80, 10,1,0,0,40,false);
+        chara[15].setStatus(4,90,30,80, 10,1,0,0,40,false);
 
 
 

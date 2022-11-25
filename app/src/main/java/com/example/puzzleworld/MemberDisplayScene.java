@@ -37,20 +37,46 @@ public class MemberDisplayScene extends AppCompatActivity {
 
         if (h == 0) {
             imageView.setImageDrawable(d.mainChara[n].getImage());
-            textView[0].setText("属性：" + d.mainChara[n].getAttribute());
             textView[1].setText("Lv." + d.mainChara[n].getLevel());
             textView[2].setText("攻撃力：" + d.mainChara[n].getAttack());
             textView[3].setText("HP      ：" + d.mainChara[n].getHp());
             textView[4].setText("回復力：" + d.mainChara[n].getRecovery());
             textView[5].setText("限界突破：" + d.mainChara[n].getNumber());
+            switch (d.mainChara[n].getAttribute()) {
+                case 1:
+                    textView[0].setText("属性：岩");
+                    break;
+                case 2:
+                    textView[0].setText("属性：水");
+                    break;
+                case 3:
+                    textView[0].setText("属性：火");
+                    break;
+                case 4:
+                    textView[0].setText("属性：草");
+                    break;
+            }
         } else {
             imageView.setImageDrawable(d.chara[n].getImage());
-            textView[0].setText("属性：" + d.chara[n].getAttribute());
             textView[1].setText("Lv." + d.chara[n].getLevel());
             textView[2].setText("攻撃力：" + d.chara[n].getAttack());
             textView[3].setText("HP      ：" + d.chara[n].getHp());
             textView[4].setText("回復力：" + d.chara[n].getRecovery());
             textView[5].setText("限界突破：" + d.chara[n].getNumber());
+            switch (d.chara[n].getAttribute()) {
+                case 1:
+                    textView[0].setText("属性：岩");
+                    break;
+                case 2:
+                    textView[0].setText("属性：水");
+                    break;
+                case 3:
+                    textView[0].setText("属性：火");
+                    break;
+                case 4:
+                    textView[0].setText("属性：草");
+                    break;
+            }
         }
 
 
@@ -72,4 +98,6 @@ public class MemberDisplayScene extends AppCompatActivity {
         @SuppressLint("DiscouragedApi") int Id = res.getIdentifier(s + (i + 1), "id", getPackageName());
         return Id;
     }
+
+
 }

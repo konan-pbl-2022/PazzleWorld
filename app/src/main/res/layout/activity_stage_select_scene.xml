@@ -12,8 +12,9 @@
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
         android:src="@drawable/background"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="16dp" />
 
     <Button
         android:id="@+id/button5"
@@ -114,8 +115,9 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:layout_marginTop="760dp"
-        app:layout_constraintBottom_toBottomOf="@+id/background"
+        android:layout_marginTop="660dp"
+        android:layout_marginBottom="100dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="@+id/background"
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="7dp">
@@ -131,7 +133,7 @@
 
         <Button
             android:id="@+id/button_gacha"
-            android:layout_width="130dp"
+            android:layout_width="128dp"
             android:layout_height="80dp"
             android:layout_marginLeft="730px"
             android:layout_marginTop="0px"

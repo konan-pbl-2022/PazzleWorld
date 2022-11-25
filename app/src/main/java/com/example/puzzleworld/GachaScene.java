@@ -350,7 +350,7 @@ public class GachaScene extends AppCompatActivity {
 //        });
 
         /*ステージ画面へ*/
-        Button toStage = (Button)findViewById(R.id.ToStage);
+        Button toStage = (Button)findViewById(R.id.button_stage);
         toStage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -360,7 +360,7 @@ public class GachaScene extends AppCompatActivity {
         });
 
         /*パーティ編成画面へ*/
-        Button toHensei = (Button)findViewById(R.id.ToHensei);
+        Button toHensei = (Button)findViewById(R.id.button_hensei);
         toHensei.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

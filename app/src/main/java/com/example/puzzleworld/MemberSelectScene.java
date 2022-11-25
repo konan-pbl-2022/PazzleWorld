@@ -285,9 +285,11 @@ public class MemberSelectScene extends AppCompatActivity {
 
 
 //        画面遷移
-        for (int i = 0; i < 3; i++) {
-            transitionButton[i] = (Button) findViewById(assignId("button", i));
-        }
+
+            transitionButton[0] = (Button) findViewById(R.id.button_hensei);
+            transitionButton[1] = (Button) findViewById(R.id.button_stage);
+            transitionButton[2] = (Button) findViewById(R.id.button_gacha);
+
         transitionButton[0].setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(MemberSelectScene.this,MemberSelectScene.class);

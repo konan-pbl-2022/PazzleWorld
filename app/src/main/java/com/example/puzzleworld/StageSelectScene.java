@@ -29,7 +29,7 @@ public class StageSelectScene extends AppCompatActivity {
                 System.out.println(PlayerStatus.GachaStone);
 
         //編成ボタン
-        Button nextButton1 = (Button)findViewById(R.id.button2);
+        Button nextButton1 = (Button)findViewById(R.id.button_hensei);
         nextButton1.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
                 Intent intent = new Intent(StageSelectScene.this, MemberSelectScene.class);
@@ -39,7 +39,7 @@ public class StageSelectScene extends AppCompatActivity {
 
 
         //ガチャボタン
-        Button nextButton2 = (Button)findViewById(R.id.button4);
+        Button nextButton2 = (Button)findViewById(R.id.button_gacha);
         nextButton2.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
                 Intent intent = new Intent(StageSelectScene.this, GachaScene.class);

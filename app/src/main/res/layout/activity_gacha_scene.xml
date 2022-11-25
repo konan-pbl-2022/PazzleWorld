@@ -2,9 +2,10 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     tools:context=".GachaScene">
+
 
     <ImageView
         android:id="@+id/background"
@@ -42,30 +43,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.751" />
-
-    <Button
-        android:id="@+id/ToHensei"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="編成"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.244"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.936" />
-
-    <Button
-        android:id="@+id/ToStage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="ステージ"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.763"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.936" />
 
     <TextView
         android:id="@+id/textView"
@@ -165,5 +142,43 @@
         app:layout_constraintTop_toTopOf="@+id/background"
         app:layout_constraintVertical_bias="0.535"
         tools:srcCompat="@tools:sample/avatars" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_marginTop="760dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/background"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="7dp">
+
+        <Button
+            android:id="@+id/button_hensei"
+            android:layout_width="130dp"
+            android:layout_height="80dp"
+            android:layout_marginLeft="10px"
+            android:layout_marginTop="0px"
+            android:text="編成"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/button_gacha"
+            android:layout_width="128dp"
+            android:layout_height="80dp"
+            android:layout_marginLeft="730px"
+            android:layout_marginTop="0px"
+            android:text="ガチャ"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/button_stage"
+            android:layout_width="130dp"
+            android:layout_height="80dp"
+            android:layout_marginLeft="370px"
+            android:layout_marginTop="0px"
+            android:text="ステージ"
+            android:textStyle="bold" />
+
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

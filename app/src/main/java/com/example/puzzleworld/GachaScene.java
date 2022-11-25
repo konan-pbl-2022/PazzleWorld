@@ -94,7 +94,7 @@ public class GachaScene extends AppCompatActivity {
                         if(GachaStone > 0){
                             PlayerStatus.GachaStone -= 1;
                             /*ガチャ石の表示の修正*/
-                            stone.setText("ガチャ石："+String.valueOf(GachaStone));
+                            stone.setText("×"+PlayerStatus.GachaStone);
 
                             /*結果表示*/
                             Random rand1 = new Random();

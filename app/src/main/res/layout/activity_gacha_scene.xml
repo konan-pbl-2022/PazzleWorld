@@ -147,7 +147,7 @@
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:layout_marginTop="660dp"
-        android:layout_marginBottom="100dp"
+        android:layout_marginBottom="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="@+id/background"
         tools:ignore="MissingConstraints"

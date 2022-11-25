@@ -4,6 +4,7 @@ import static com.example.puzzleworld.PlayerStatus.GachaStone;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -19,6 +20,7 @@ public class GachaScene extends AppCompatActivity {
 
     ShareData d;
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,8 +29,8 @@ public class GachaScene extends AppCompatActivity {
         d = (ShareData)getApplication();
 
         /*ガチャ石の表示*/
-        TextView stone = (TextView)findViewById(R.id.stoneView);
-        stone.setText("ガチャ石："+String.valueOf(GachaStone));
+        TextView stone = (TextView)findViewById(R.id.textView);
+        stone.setText("×"+PlayerStatus.GachaStone);
 
 
         /*排出率表示のボタン*/

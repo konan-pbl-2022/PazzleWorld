@@ -2,6 +2,7 @@ package com.example.puzzleworld;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -15,6 +16,7 @@ public class StageSelectScene extends AppCompatActivity {
     @Override
     public void onBackPressed() {} //戻るボタンの無効化
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,7 +24,7 @@ public class StageSelectScene extends AppCompatActivity {
 
         //ガチャ石表示
         TextView textView = (TextView)findViewById(R.id.textView);
-        textView.setText(String.valueOf(PlayerStatus.GachaStone));
+        textView.setText("×" + PlayerStatus.GachaStone);
 
                 System.out.println(PlayerStatus.GachaStone);
 

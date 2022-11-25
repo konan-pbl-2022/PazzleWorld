@@ -18,22 +18,6 @@ import java.util.Random;
 public class GachaScene extends AppCompatActivity {
 
     ShareData d;
-    int chara_count0 = 0;
-    int chara_count1 = 0;
-    int chara_count2 = 0;
-    int chara_count3 = 0;
-    int chara_count4 = 0;
-    int chara_count5 = 0;
-    int chara_count6 = 0;
-    int chara_count7 = 0;
-    int chara_count8 = 0;
-    int chara_count9 = 0;
-    int chara_count10 = 0;
-    int chara_count11 = 0;
-    int chara_count12 = 0;
-    int chara_count13 = 0;
-    int chara_count14 = 0;
-    int chara_count15 = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +28,7 @@ public class GachaScene extends AppCompatActivity {
 
         /*ガチャ石の表示*/
         TextView stone = (TextView)findViewById(R.id.stoneView);
-        stone.setText("ガチャ石："+String.valueOf(GachaStone));
+        stone.setText("："+String.valueOf(GachaStone));
 
 
         /*排出率表示のボタン*/
@@ -119,155 +103,155 @@ public class GachaScene extends AppCompatActivity {
                             /*ガチャの排出率調整と処理*/
                             if(rarity < 6) { //6%の確率で"SSR"
                                 if(type < 25) {
-                                    ResultView.setText("SSR");
                                     if(d.chara[12].possession == true) {
+                                        ResultView.setText("SSR");
                                         d.chara[12].number += 1;
                                     }else{
-                                        d.chara[12].possession =true;
-                                        ResultView.setText("(New!!)");
+                                        d.chara[12].possession = true;
+                                        ResultView.setText("SSR(New!!)");
                                     }
                                     resultImage.setImageDrawable(d.chara[12].image);
                                 }else if(type < 50){
-                                    ResultView.setText("SSR");
                                     if(d.chara[13].possession == true) {
+                                        ResultView.setText("SSR");
                                         d.chara[13].number += 1;
                                     }else{
                                         d.chara[13].possession =true;
-                                        ResultView.setText("(New!!)");
+                                        ResultView.setText("SSR(New!!)");
                                     }
                                     resultImage.setImageDrawable(d.chara[13].image);
                                 }else if(type < 75){
-                                    ResultView.setText("SSR");
                                     if(d.chara[14].possession == true) {
+                                        ResultView.setText("SSR");
                                         d.chara[14].number += 1;
                                     }else{
                                         d.chara[14].possession =true;
-                                        ResultView.setText("(New!!)");
+                                        ResultView.setText("SSR(New!!)");
                                     }
                                     resultImage.setImageDrawable(d.chara[14].image);
                                 }else{
-                                    ResultView.setText("SSR");
                                     if(d.chara[15].possession == true) {
+                                        ResultView.setText("SSR");
                                         d.chara[15].number += 1;
                                     }else{
                                         d.chara[15].possession =true;
-                                        ResultView.setText("(New!!)");
+                                        ResultView.setText("SSR(New!!)");
                                     }
                                     resultImage.setImageDrawable(d.chara[15].image);
                                 }
 
                             }else if(rarity < 20){ //14%の確率で"SR"
                                 if(type < 25) {
-                                    ResultView.setText("SR");
                                     if(d.chara[8].possession == true) {
+                                        ResultView.setText("SR");
                                         d.chara[8].number += 1;
                                     }else{
                                         d.chara[8].possession =true;
-                                        ResultView.setText("(New!!)");
+                                        ResultView.setText("SR(New!!)");
                                     }
                                     resultImage.setImageDrawable(d.chara[8].image);
                                 }else if(type < 50){
-                                    ResultView.setText("SR");
                                     if(d.chara[9].possession == true) {
+                                        ResultView.setText("SR");
                                         d.chara[9].number += 1;
                                     }else{
                                         d.chara[9].possession =true;
-                                        ResultView.setText("(New!!)");
+                                        ResultView.setText("SR(New!!)");
                                     }
                                     resultImage.setImageDrawable(d.chara[9].image);
                                 }else if(type < 75){
-                                    ResultView.setText("SR");
                                     if(d.chara[10].possession == true) {
+                                        ResultView.setText("SR");
                                         d.chara[10].number += 1;
                                     }else{
                                         d.chara[10].possession =true;
-                                        ResultView.setText("(New!!)");
+                                        ResultView.setText("SR(New!!)");
                                     }
                                     resultImage.setImageDrawable(d.chara[8].image);
                                 }else{
-                                    ResultView.setText("SR");
                                     if(d.chara[11].possession == true) {
+                                        ResultView.setText("SR");
                                         d.chara[11].number += 1;
                                     }else{
                                         d.chara[11].possession =true;
-                                        ResultView.setText("(New!!)");
+                                        ResultView.setText("SR(New!!)");
                                     }
                                     resultImage.setImageDrawable(d.chara[11].image);
                                 }
 
                             }else if(rarity < 40){ //20%の確率で"R"
                                 if(type < 25) {
-                                    ResultView.setText("R");
                                     if(d.chara[4].possession == true) {
+                                        ResultView.setText("R");
                                         d.chara[4].number += 1;
                                     }else{
                                         d.chara[4].possession =true;
-                                        ResultView.setText("(New!!)");
+                                        ResultView.setText("R(New!!)");
                                     }
                                     resultImage.setImageDrawable(d.chara[4].image);
                                 }else if(type < 50){
-                                    ResultView.setText("R");
                                     if(d.chara[5].possession == true) {
+                                        ResultView.setText("R");
                                         d.chara[5].number += 1;
                                     }else{
                                         d.chara[5].possession =true;
-                                        ResultView.setText("(New!!)");
+                                        ResultView.setText("R(New!!)");
                                     }
                                     resultImage.setImageDrawable(d.chara[5].image);
                                 }else if(type < 75){
-                                    ResultView.setText("R");
                                     if(d.chara[6].possession == true) {
+                                        ResultView.setText("R");
                                         d.chara[6].number += 1;
                                     }else{
                                         d.chara[6].possession =true;
-                                        ResultView.setText("(New!!)");
+                                        ResultView.setText("R(New!!)");
                                     }
                                     resultImage.setImageDrawable(d.chara[6].image);
                                 }else{
-                                    ResultView.setText("R");
                                     if(d.chara[7].possession == true) {
+                                        ResultView.setText("R");
                                         d.chara[7].number += 1;
                                     }else{
                                         d.chara[7].possession =true;
-                                        ResultView.setText("(New!!)");
+                                        ResultView.setText("R(New!!)");
                                     }
                                     resultImage.setImageDrawable(d.chara[7].image);
                                 }
                             }else{ //それ以外(60%)は"N"
                                 if(type < 25) {
-                                    ResultView.setText("N");
                                     if(d.chara[0].possession == true) {
+                                        ResultView.setText("N");
                                         d.chara[0].number += 1;
                                     }else{
                                         d.chara[0].possession =true;
-                                        ResultView.setText("(New!!)");
+                                        ResultView.setText("N(New!!)");
                                     }
                                     resultImage.setImageDrawable(d.chara[0].image);
                                 }else if(type < 50){
-                                    ResultView.setText("N");
                                     if(d.chara[1].possession == true) {
+                                        ResultView.setText("N");
                                         d.chara[1].number += 1;
                                     }else{
                                         d.chara[1].possession =true;
-                                        ResultView.setText("(New!!)");
+                                        ResultView.setText("N(New!!)");
                                     }
                                     resultImage.setImageDrawable(d.chara[1].image);
                                 }else if(type < 75){
-                                    ResultView.setText("N");
                                     if(d.chara[2].possession == true) {
+                                        ResultView.setText("N");
                                         d.chara[2].number += 1;
                                     }else{
                                         d.chara[2].possession =true;
-                                        ResultView.setText("(New!!)");
+                                        ResultView.setText("N(New!!)");
                                     }
                                     resultImage.setImageDrawable(d.chara[2].image);
                                 }else{
-                                    ResultView.setText("N");
                                     if(d.chara[3].possession == true) {
+                                        ResultView.setText("N");
                                         d.chara[3].number += 1;
                                     }else{
                                         d.chara[3].possession =true;
-                                        ResultView.setText("(New!!)");
+                                        ResultView.setText("N(New!!)");
                                     }
                                     resultImage.setImageDrawable(d.chara[3].image);
                                 }

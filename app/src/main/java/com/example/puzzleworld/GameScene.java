@@ -235,6 +235,8 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
                 ImageView dropCover = findViewById(R.id.dropCover);
                 dropCover.setVisibility(View.INVISIBLE);
                 typeBox(3,NowEnemyType);
+                TextView PhaseText = (TextView) findViewById(R.id.phaseText);
+                PhaseText.setText("Phase " + CurrentPhase);
             }
         }
         Mode = 1;
@@ -544,6 +546,7 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
     }
 
     private void NextEnemySpawn(){
+
         ResetPlayerUI();
         ImageView DamageEffect2 = findViewById(R.id.DamageEffect2);
         DamageEffect2.setVisibility(View.INVISIBLE);
@@ -558,6 +561,10 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
         }
         else {
             CurrentPhase += 1;
+            TextView PlayerATKText = (TextView) findViewById(R.id.PlayerPText);
+            PlayerATKText.setText("Phase "+ CurrentPhase);
+            TextView PhaseText = (TextView) findViewById(R.id.phaseText);
+            PhaseText.setText("Phase " + CurrentPhase);
             EnemyBox();//次の敵のステータス
             typeBox(3,NowEnemyType);
         }
@@ -741,6 +748,7 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
             Drawable typeDrawable4 = getResources().getDrawable(DropDesign[Num]);
             TypeImg4.setImageDrawable(typeDrawable4);
         }
+
 
     }
 }

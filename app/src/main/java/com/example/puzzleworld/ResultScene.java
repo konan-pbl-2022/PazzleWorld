@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-
 public class ResultScene extends AppCompatActivity {
     private System system;
     ShareData d;
@@ -28,6 +27,13 @@ public class ResultScene extends AppCompatActivity {
         d =(ShareData)getApplication();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result_scene);
+        ImageView stoneclear = (ImageView)findViewById(R.id.imageView6);
+        ImageView stonehatuclear = (ImageView)findViewById(R.id.imageView7);
+        ImageView stonelvbona = (ImageView)findViewById(R.id.imageView8);
+
+        stoneclear.setVisibility(View.INVISIBLE);
+        stonehatuclear.setVisibility(View.INVISIBLE);
+        stonelvbona.setVisibility(View.INVISIBLE);
 
         TextView resultText = (TextView)findViewById(R.id.textView3);
 
@@ -40,25 +46,34 @@ public class ResultScene extends AppCompatActivity {
         ImageView CharaImg3 = findViewById(R.id.Chara3);
         Drawable drawable3 = d.mainChara[2].getImage();
         CharaImg3.setImageDrawable(drawable3);
+        TextView scoreLabel = findViewById(R.id.scoreLabel);
+        TextView scoreLabel2 = findViewById(R.id.scoreLabel2);
+        TextView scoreLabel3 = findViewById(R.id.scoreLabel3);
+        scoreLabel.setText("");
+        scoreLabel2.setText("");
+        scoreLabel3.setText("");
 
         if(PlayerStatus.GameClear == true) {
             resultText.setText("Stage Clear");
 
 
-            TextView scoreLabel = findViewById(R.id.scoreLabel);
-            TextView scoreLabel2 = findViewById(R.id.scoreLabel2);
-            TextView scoreLabel3 = findViewById(R.id.scoreLabel3);
-            scoreLabel3.setText("");
+            stoneclear.setVisibility(View.VISIBLE);
+
             if(PlayerStatus.CanPlayStage == PlayerStatus.SelectStage) {
 
-                scoreLabel.setText("初クリアボーナス  1 魔晶石");
-                scoreLabel2.setText("クリアボーナス  1 魔晶石");
+                scoreLabel.setText("初クリアボーナス              x 1");
+                stoneclear.setVisibility(View.VISIBLE);
+                stonehatuclear.setVisibility(View.VISIBLE);
+
+                scoreLabel2.setText("クリアボーナス              x 1");
                 PlayerStatus.GachaStone += 2;
                 PlayerStatus.CanPlayStage += 1;
 
             }else{
                 scoreLabel.setText("");
-                scoreLabel2.setText("クリアボーナス  1 魔晶石");
+                scoreLabel2.setText("クリアボーナス              x 1");
+                stoneclear.setVisibility(View.VISIBLE);
+
                 PlayerStatus.GachaStone += 1;
             }
 
@@ -104,13 +119,14 @@ public class ResultScene extends AppCompatActivity {
                         +"\n    Level UP" + leftLV[2] + " --> " + d.mainChara[2].getLevel());
             }
 
-            if(levelUpCount > 0) scoreLabel3.setText("LvUPボーナス  "+levelUpCount+" 魔晶石");
+            if(levelUpCount > 0) {
+                scoreLabel3.setText("LvUPボーナス              x "+levelUpCount);
+                stonelvbona.setVisibility(View.VISIBLE);
+            }
             PlayerStatus.GachaStone += levelUpCount;
         }
         if(PlayerStatus.GameClear == false) {
-            TextView scoreLabel = findViewById(R.id.scoreLabel);
             scoreLabel.setText("");
-            TextView scoreLabel2 = findViewById(R.id.scoreLabel2);
             scoreLabel2.setText("");
             resultText.setText("Game Over");
 
@@ -122,17 +138,11 @@ public class ResultScene extends AppCompatActivity {
             status003.setText("何も得られませんでした...");
         }
 
-
-
         SharedPreferences sharedPreferences = getSharedPreferences("GAME_DATA", MODE_PRIVATE);
         int highScore = sharedPreferences.getInt("HIGH_SCORE", 0);
-
-
-
     }
 
-        public void tryAgain(View view){
-            startActivity(new Intent(getApplicationContext(), StageSelectScene.class));
-        }
+    public void tryAgain(View view){
+        startActivity(new Intent(getApplicationContext(), StageSelectScene.class));
+    }
 }
-

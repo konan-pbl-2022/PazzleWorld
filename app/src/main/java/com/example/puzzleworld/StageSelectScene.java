@@ -91,7 +91,7 @@ public class StageSelectScene extends AppCompatActivity {
             }
         });
 
-        //ステージ3ボタン
+        //ステージ4ボタン
         Button nextButton6 = (Button)findViewById(R.id.button8);
         //表示
         if(PlayerStatus.CanPlayStage >= 4){
@@ -103,6 +103,40 @@ public class StageSelectScene extends AppCompatActivity {
         nextButton6.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
                 PlayerStatus.SelectStage = 4;
+                Intent intent = new Intent(StageSelectScene.this, GameScene.class);
+                startActivity(intent);
+            }
+        });
+
+        //ステージ5ボタン
+        Button nextButton7 = (Button)findViewById(R.id.button9);
+        //表示
+        if(PlayerStatus.CanPlayStage >= 5){
+            nextButton7.setVisibility(View.VISIBLE);
+        }else{
+            nextButton7.setVisibility(View.INVISIBLE);
+        }
+        //画面切り替え
+        nextButton7.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                PlayerStatus.SelectStage = 5;
+                Intent intent = new Intent(StageSelectScene.this, GameScene.class);
+                startActivity(intent);
+            }
+        });
+
+        //ステージ6ボタン
+        Button nextButton8 = (Button)findViewById(R.id.button10);
+        //表示
+        if(PlayerStatus.CanPlayStage >= 6){
+            nextButton8.setVisibility(View.VISIBLE);
+        }else{
+            nextButton8.setVisibility(View.INVISIBLE);
+        }
+        //画面切り替え
+        nextButton8.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                PlayerStatus.SelectStage = 6;
                 Intent intent = new Intent(StageSelectScene.this, GameScene.class);
                 startActivity(intent);
             }

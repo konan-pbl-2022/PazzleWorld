@@ -85,7 +85,9 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
     int EnemyStatus[][] = {/*s1*/{1,94,7},{1,159,11},
                            /*s2*/{2,184,13},{3,249,17},
                            /*s3*/{4,360,21},{2,515,29},
-                           /*s4*/{3,635,32},{1,726,37},{2,873,46}};
+                           /*s4*/{3,635,32},{1,726,37},{2,873,46},
+                           /*s5*/{1,918,48},{4,944,52},{3,873,55},
+                           /*s6*/{2,953,59},{3,999,61},{4,1048,64}};
     /////外部から変数を受け取るエリア
     int Stage = 1;
     int CharaStatus[][] = new int[3][4];//0属性,1攻撃,2体力,3回復
@@ -717,6 +719,34 @@ public class GameScene extends AppCompatActivity implements View.OnTouchListener
             if(CurrentPhase == 3){
                 EnemyNum = 8;
                 drawable = getResources().getDrawable(R.drawable.enemy4);
+            }
+        }
+        if(Stage == 5){
+            if(CurrentPhase == 1){
+                EnemyNum = 9;
+                drawable = getResources().getDrawable(R.drawable.enemy1);
+            }
+            if(CurrentPhase == 2){
+                EnemyNum = 10;
+                drawable = getResources().getDrawable(R.drawable.enemy5);
+            }
+            if(CurrentPhase == 3){
+                EnemyNum = 11;
+                drawable = getResources().getDrawable(R.drawable.enemy7);
+            }
+        }
+        if(Stage == 6){
+            if(CurrentPhase == 1){
+                EnemyNum = 12;
+                drawable = getResources().getDrawable(R.drawable.enemy4);
+            }
+            if(CurrentPhase == 2){
+                EnemyNum = 13;
+                drawable = getResources().getDrawable(R.drawable.enemy8);
+            }
+            if(CurrentPhase == 3){
+                EnemyNum = 14;
+                drawable = getResources().getDrawable(R.drawable.enemy2);
             }
         }
         EnemyImg.setImageDrawable(drawable);
